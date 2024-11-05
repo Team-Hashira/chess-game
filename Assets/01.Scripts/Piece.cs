@@ -9,17 +9,18 @@ public class Piece : MonoBehaviour
 
     public int[,]       MovableTiles { get; private set; }
     public Vector2Int   CenterPos { get; private set; }
+
     public void Init()
     {
         ID = (int)PieceType + (int)Team;
 
         string[] lines = _textAsset.text.Split('\n');
 
-        MovableTiles = new int[lines.Length, lines[0].Length-1];
+        MovableTiles = new int[lines.Length - 1, lines.Length - 1];
 
-        for (int i = 0; i < lines.Length; i++)
+        for (int i = 0; i < lines.Length-1; i++)
         {
-            for (int j = 0; j < lines[0].Length-1; j++)
+            for (int j = 0; j < lines.Length-1; j++)
             {
                 MovableTiles[i, j] = lines[i][j] - 48;
 				if(MovableTiles[i, j] == 2)
@@ -35,9 +36,24 @@ public class Piece : MonoBehaviour
         transform.position = targetPos;
     }
 
+	private void OnDrawGizmosSelected()
+	{
+		if (_textAsset == null) return;
+		Init();
+
+		for (int i = 0; i < MovableTiles.GetLength(0); i++)
+		{
+			for (int j = 0; j < MovableTiles.GetLength(1); j++)
+			{
+				CheckGizemoDraw(i, j);
+			}
+		}
+	}
+
 	private void OnDrawGizmos()
 	{
-        if (MovableTiles == null) return;
+		if (MovableTiles == null) return;
+
 		for (int i = 0; i < MovableTiles.GetLength(0); i++)
 		{
 			for (int j = 0; j < MovableTiles.GetLength(1); j++)
