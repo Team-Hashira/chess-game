@@ -9,7 +9,6 @@ public class ChessController : MonoBehaviour
     public Tilemap curMap;
     
     public int[,] Map {get; private set;}
-    public Vector2Int CurrentSelectedPosition {get; private set;} = new Vector2Int(-1, -1);
     
     //Controllers
     private PlayersController _playersController;
@@ -46,7 +45,6 @@ public class ChessController : MonoBehaviour
 
 	private IEnumerator TurnProcess()
     {
-        CurrentSelectedPosition = new Vector2Int(-1, -1);
         _playersController.OnClientPosPickEvent += FinalMoveOperation;
 		yield return new WaitUntil(()=>_playersController.positionPeekComplete);
 		_playersController.OnClientPosPickEvent -= FinalMoveOperation;
