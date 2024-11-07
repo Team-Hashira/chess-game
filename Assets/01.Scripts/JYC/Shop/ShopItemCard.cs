@@ -9,6 +9,7 @@ public class ShopItemCard : MonoBehaviour
     private void Awake()
     {
         _coinText = GetComponentInChildren<TextMeshProUGUI>();
+        //_coinText = transform.Find("Text_Price").GetComponent<TextMeshProUGUI>();
     }
 
     private void Start()
