@@ -51,7 +51,7 @@ namespace StageMapGenerator
 		}
 
 		[ContextMenu("GenerateMap")]
-		private void GenerateMap()
+		public void GenerateMap()
 		{
 			_map = new Stage[maxDepth, maxRange];
 
