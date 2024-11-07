@@ -250,11 +250,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stageMapDataSO: {fileID: 11400000, guid: b15036388d6d7e1498088bac4afb2b7d, type: 2}
-  startStageCount: 8
+  startStageCount: 4
   edgeCount: 20
   maxDepth: 20
-  maxRange: 10
-  seed: 0
+  maxRange: 7
+  interval: 2
+  ranWorldOffset: 0.2
+  edgePerent: 10
   _linePrefab: {fileID: 4236787398264867169, guid: c82f9589705c21f48b11f463fb389481, type: 3}
   _IconPrefab: {fileID: 1319506223607351989, guid: d572de412f98dd7439613b535051ff44, type: 3}
 --- !u!4 &236032569

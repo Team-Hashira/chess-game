@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,8 +19,9 @@ namespace StageMapGenerator
 	public class Stage
 	{
 		public StageType stageType = StageType.None;
-		public Vector3 pos;
-		public Stack<Stage> targets = new Stack<Stage>();
+		public Vector2 posAtWorld;
+		public List<Stage> targets = new List<Stage>();
+		public int visitCount = 0;
 	}
 
 	public class StageMapGenerator : MonoBehaviour
@@ -31,8 +33,9 @@ namespace StageMapGenerator
 		public int edgeCount = 30;
 		public int maxDepth = 7;
 		public int maxRange = 5;
-
-		public int seed = 0;
+		public float interval = 2;
+		public float ranWorldOffset = 0.2f;
+		public int edgePerent = 30;
 
 		[SerializeField] private Line _linePrefab;
 		[SerializeField] private GameObject _IconPrefab;
@@ -40,6 +43,60 @@ namespace StageMapGenerator
 		private int stageTypeMaxCount;
 
 		private Stage[,] _map;
+		private Vector2 _mapCenter;
+		
+		private void Awake()
+		{
+			GenerateMap();
+		}
+
+		[ContextMenu("GenerateMap")]
+		private void GenerateMap()
+		{
+			_map = new Stage[maxDepth, maxRange];
+
+			for (int i = 0; i < transform.childCount; i++)
+			{
+				Destroy(transform.GetChild(i).gameObject);
+			}
+
+
+			for (int i = 0; i < maxDepth; i++)
+				for (int j = 0; j < maxRange; j++)
+					_map[i, j] = new Stage();
+
+
+			//StageType의 최대 개수 가지고 오기
+			stageTypeMaxCount = Enum.GetValues(typeof(StageType)).Length;
+
+			//Stage들의 정보 가지고 오기
+			_stageOfCountMap = new Dictionary<StageType, int>(_stageMapDataSO.stageOfCountMap);
+
+			var firstRanPos = RandomPos(maxRange);
+			for (int i = 0; i < startStageCount; i++)
+			{
+				Stage stage = _map[0, firstRanPos[i]];
+				//처음은 무조건 전투 스테이지
+				stage.stageType = StageType.Battle;
+				stage.posAtWorld = new Vector2(firstRanPos[i], 0) * interval + UnityEngine.Random.insideUnitCircle * ranWorldOffset;
+				var icon = Instantiate(_IconPrefab, stage.posAtWorld, Quaternion.identity);
+				icon.transform.SetParent(transform, true);
+				AddRandomTarget(0, firstRanPos[i]);
+			}
+
+			//선 잇기
+			for (int i = 0; i < maxRange; i++)
+			{
+				if (_map[0, i].stageType != StageType.None)
+				{
+					DrawLine(_map[0, i]);
+				}
+			}
+
+			//카메라 셋
+			_mapCenter = new Vector2(maxRange / 2, (maxDepth / 2)-1) * interval;
+			Camera.main.transform.position = new Vector3(_mapCenter.x, _mapCenter.y, -10);
+		}
 
 		private int[] RandomPos(int range, int ranAmount = 5)
 		{
@@ -60,30 +117,49 @@ namespace StageMapGenerator
 
 			return positions;
 		}
-	
+
 		private void AddRandomTarget(int curY, int curX)
 		{
 			Stage stage = _map[curY, curX];
 
-			stage.stageType = StageType.Battle;
-			stage.pos = new Vector3(curX, curY);
-			Instantiate(_IconPrefab, stage.pos, Quaternion.identity);
-			
+			if (stage.stageType == StageType.None)
+			{
+				stage.stageType = GetRandomStageType();
+
+				stage.posAtWorld =
+					new Vector2(curX, curY) * interval
+					+ UnityEngine.Random.insideUnitCircle * ranWorldOffset;
+
+				var icon = Instantiate(_IconPrefab, stage.posAtWorld, Quaternion.identity);
+				icon.transform.SetParent(transform, true);
+
+			}
+
 			int targetY = curY + 1; //한층 올라가기
 
-			if (targetY < maxDepth-1)
+			if (targetY < maxDepth - 1)
 			{
 				int targetX = 0;
 				Stage targetStage = null;
 
-				if (targetY == maxDepth-2) targetX =  maxRange / 2;
-				else targetX = Mathf.Clamp(curX + UnityEngine.Random.Range(-1, 2), 0, maxRange - 1);
+				int loopRange = 100;
+				bool[] dirCheck = new bool[3];
+				do
+				{
+					int dirRange = UnityEngine.Random.Range(-1, 2);
+					if (dirCheck[dirRange + 1] == true) break;
+					dirCheck[dirRange + 1] = true;
+					if (targetY == maxDepth - 2) targetX = maxRange / 2;
+					else targetX = Mathf.Clamp(curX + dirRange, 0, maxRange - 1);
 
-				targetStage = _map[targetY, targetX];
+					targetStage = _map[targetY, targetX];
 
-				stage.targets.Push(targetStage);
+					stage.targets.Add(targetStage);
 
-				AddRandomTarget(targetY, targetX);
+					AddRandomTarget(targetY, targetX);
+					loopRange = UnityEngine.Random.Range(0, 100);
+				}
+				while (loopRange < edgePerent);
 			}
 		}
 
@@ -97,7 +173,7 @@ namespace StageMapGenerator
 			//전부 비어있는지 확인
 			foreach (var stageType in _stageOfCountMap)
 			{
-				if(stageType.Value != 0)
+				if (stageType.Value != 0)
 				{
 					isAllZero = false;
 					break;
@@ -110,10 +186,10 @@ namespace StageMapGenerator
 				return result;
 			}
 
-			while (isComplete == false) 
+			while (isComplete == false)
 			{
 				result = (StageType)UnityEngine.Random.Range((int)StageType.Battle, stageTypeMaxCount);
-				if(_stageOfCountMap[result] > 0)
+				if (_stageOfCountMap[result] > 0)
 				{
 					--_stageOfCountMap[result];
 					isComplete = true;
@@ -122,55 +198,27 @@ namespace StageMapGenerator
 			return result;
 		}
 
-		private void Awake()
+		private void DrawLine(Stage stage)
 		{
-			_map = new Stage[maxDepth, maxRange];
+			Queue<Stage> q = new Queue<Stage>();
+			q.Enqueue(stage);
 
-            for (int i = 0; i < maxDepth; i++)
-				for (int j = 0; j < maxRange; j++)
-					_map[i, j] = new Stage();
-
-            //StageType의 최대 개수 가지고 오기
-            stageTypeMaxCount = Enum.GetValues(typeof(StageType)).Length;
-
-			//Stage들의 정보 가지고 오기
-			_stageOfCountMap = new Dictionary<StageType, int>(_stageMapDataSO.stageOfCountMap);
-
-			var firstRanPos = RandomPos(maxRange);
-			for (int i = 0; i < startStageCount; i++)
+			while (q.Count > 0)
 			{
-				Stage stage = _map[0, firstRanPos[i]];
-				//처음은 무조건 전투 스테이지
-				stage.stageType = StageType.Battle;
-				AddRandomTarget(0, firstRanPos[i]);
-			}
+				stage = q.Dequeue();
 
-			//선 잇기
-			for (int i = 0; i < maxRange; i++)
-			{
-				if (_map[0, i].stageType != StageType.None)
+				for (int i = 0; i < stage.targets.Count; i++)
 				{
-					DrawLine(0, i);
+					if(stage.visitCount < stage.targets.Count)
+					{
+						stage.visitCount++;
+						var line = Instantiate(_linePrefab, stage.posAtWorld, Quaternion.identity);
+						line.transform.SetParent(transform, true);
+						line.TargetTo(stage.targets[i].posAtWorld);
+						q.Enqueue(stage.targets[i]);
+					}
 				}
 			}
-		}
-
-		private void DrawLine(int y, int x)
-		{
-			var line = Instantiate(_linePrefab, _map[y, x].pos, Quaternion.identity);
-
-			Vector3 targetPos = Vector3.zero;
-
-			Stack<Stage> targets = _map[y, x].targets;
-			if (targets.Count > 0)
-				targetPos = targets.Pop().pos;
-
-			line.TargetTo(targetPos);
-
-			if (y + 1 < maxDepth-2)
-			{
-				DrawLine(y + 1, (int)targetPos.x);
-			}	
 		}
 	}
 }
