@@ -1933,7 +1933,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec27afef21d2e204fbff86d5cd845cda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemCardSO: {fileID: 11400000, guid: c9135df9bff3f8b48a0a155145011cae, type: 2}
+  itemCardSO: {fileID: 11400000, guid: 82676f39189bd0840bb0e4a3d8a951bc, type: 2}
 --- !u!114 &1887057780
 MonoBehaviour:
   m_ObjectHideFlags: 0
