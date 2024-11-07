@@ -30,7 +30,6 @@ namespace StageMapGenerator
 		public Dictionary<StageType, int> _stageOfCountMap;
 
 		public int startStageCount = 2;
-		public int edgeCount = 30;
 		public int maxDepth = 7;
 		public int maxRange = 5;
 		public float interval = 2;
