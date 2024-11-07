@@ -62,11 +62,14 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ID
         Destroy(gameObject);
     }
 
-    public void SetUseable(bool value)
+    public void UpdateUseable()
     {
-        if (isUseable == value) return;
-        isUseable = value;
-        VisualTrm.GetComponent<Image>().color = value ? Color.yellow : Color.white;
+        bool newValue = Vector3.SqrMagnitude(_holder.UseAreaTrm.position - VisualTrm.position) < 10000f;
+        if (isUseable != newValue)
+        {
+            isUseable = newValue;
+            VisualTrm.GetComponent<Image>().color = isUseable ? Color.yellow : Color.white;
+        }
     }
 
     public void SetStartValue()
@@ -100,7 +103,6 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ID
         isSelected = true;
         _holder.SetSelectCard(this, true);
         _startOffset = eventData.position - (Vector2)transform.position;
-        Debug.Log("End");
     }
 
     public void OnEndDrag(PointerEventData eventData)

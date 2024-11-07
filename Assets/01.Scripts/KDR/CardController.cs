@@ -13,7 +13,7 @@ public class CardController : MonoBehaviour
     public float xPosInterval;
     public float yPosInterval;
 
-    [SerializeField] private Transform _useAreaTrm;
+    [field:SerializeField] public Transform UseAreaTrm {  get; private set; }
 
     private void Awake()
     {
@@ -59,14 +59,14 @@ public class CardController : MonoBehaviour
             }
             else
             {
-                _cards[i].SetUseable(Vector3.Magnitude(_useAreaTrm.position - _cards[i].VisualTrm.position) < 250);
+                _cards[i].UpdateUseable();
             }
         }
     }
 
     public void SetSelectCard(Card card, bool isOn)
     {
-        //_useAreaTrm.gameObject.SetActive(isOn);
+        UseAreaTrm.gameObject.SetActive(isOn);
 
         if (isOn == false && card.isUseable)
         {
