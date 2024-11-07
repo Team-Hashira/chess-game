@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System.Collections.Generic;
 using System.Security.Claims;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -30,30 +31,52 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ID
     public List<Curse> curse;
     public List<Blessing> blessing;
 
-    public int cost;
-    public int id;
-    public bool onMouse;
-    public bool isSelected;
-    public bool isUseable;
+    public bool OnSelected { get; private set; }
+    public bool IsSelectable { get; private set; }
+    public bool IsHolded { get; private set; }
+    public bool IsUseable { get; private set; }
+    public bool IsFront {  get; private set; }
 
     public RectTransform VisualTrm { get; private set; }
-    private RectTransform _rectTrm;
+    public Image VisualImage { get; private set; }
+    private GameObject _elementsObj;
+
+    public CardSO cardSO;
+
+    [SerializeField] private Sprite _forntSprite;
+    [SerializeField] private Sprite _backSprite;
 
     private Vector2 _startOffset;
     private Vector3 _onMouseScale = Vector3.one * 1.2f;
-    private float _visualDefaultYPos;
-
-    private Vector2 _startPos;
-    private Quaternion _startRot;
 
     private CardController _holder;
 
-    public void Init(CardController holder, int id)
+    private Sequence _turnSeq;
+
+    public void Init(CardController holder)
     {
-        this.id = id;
         _holder = holder;
-        _rectTrm = transform as RectTransform;
         VisualTrm = transform.Find("Visual") as RectTransform;
+        VisualImage = VisualTrm.GetComponent<Image>();
+        _elementsObj = VisualTrm.Find("Elements").gameObject;
+    }
+
+    public void Turn(bool isFront)
+    {
+        if (_turnSeq != null && _turnSeq.IsActive()) _turnSeq.Kill();
+        _turnSeq = DOTween.Sequence();
+
+        IsSelectable = false;
+        IsFront = isFront;
+
+        _turnSeq.Append(VisualTrm.DOScaleX(0, 0.1f))
+            .AppendCallback(() =>
+            {
+                _elementsObj.SetActive(IsFront);
+                VisualImage.sprite = isFront ? _forntSprite : _backSprite;
+            })
+            .Append(VisualTrm.DOScaleX(1, 0.1f))
+            .AppendCallback(() => IsSelectable = true);
     }
 
     public void Use()
@@ -65,18 +88,11 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ID
     public void UpdateUseable()
     {
         bool newValue = Vector3.SqrMagnitude(_holder.UseAreaTrm.position - VisualTrm.position) < 10000f;
-        if (isUseable != newValue)
+        if (IsUseable != newValue)
         {
-            isUseable = newValue;
-            VisualTrm.GetComponent<Image>().color = isUseable ? Color.yellow : Color.white;
+            IsUseable = newValue;
+            VisualTrm.GetComponent<Image>().color = IsUseable ? Color.yellow : Color.white;
         }
-    }
-
-    public void SetStartValue()
-    {
-        _visualDefaultYPos = VisualTrm.anchoredPosition.y;
-        _startPos = _rectTrm.anchoredPosition;
-        _startRot = transform.rotation;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -86,28 +102,30 @@ public class Card : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ID
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        onMouse = true;
+        if (IsSelectable == false) return;
+        OnSelected = true;
         VisualTrm.DOScale(_onMouseScale, 0.1f);
-        VisualTrm.DOAnchorPosY(_visualDefaultYPos + 100f, 0.1f);
+        //VisualTrm.DOAnchorPosY(_visualDefaultYPos + 100f, 0.1f);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        onMouse = false;
+        if (IsSelectable == false) return;
+        OnSelected = false;
         VisualTrm.DOScale(Vector3.one, 0.1f);
-        VisualTrm.DOAnchorPosY(_visualDefaultYPos, 0.1f);
+        //VisualTrm.DOAnchorPosY(_visualDefaultYPos, 0.1f);
     }
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        isSelected = true;
+        IsHolded = true;
         _holder.SetSelectCard(this, true);
         _startOffset = eventData.position - (Vector2)transform.position;
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        isSelected = false;
+        IsHolded = false;
         _holder.SetSelectCard(this, false);
     }
 }
