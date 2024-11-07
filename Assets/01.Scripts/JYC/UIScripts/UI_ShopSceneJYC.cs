@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_ShopSceneJYC : UI_Scene
 {
@@ -21,8 +22,15 @@ public class UI_ShopSceneJYC : UI_Scene
         BindTexts(typeof(Texts));
 
         GetImages((int)Images.Image_ShopBackGround).transform.position = new Vector3(0,0,0);
-        GetTexts((int)Texts.Text_Coin).text = Managers.Coin.SetCoin().ToString();
 
         return true;
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.P))
+            GetImages((int)Images.Image_ShopBackGround).transform.position = new Vector3(-2000, 0, 0);
+
+        GetTexts((int)Texts.Text_Coin).text = Managers.Coin.SetCoin().ToString(); // 이건 수정할거임
     }
 }

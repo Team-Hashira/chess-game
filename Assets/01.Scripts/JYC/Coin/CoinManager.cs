@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class CoinManager : MonoBehaviour
 {
-    private int _coin;
+    private int _coin = 110;
     private int _currentCoin;
 
     public void GetCoin(int value)
