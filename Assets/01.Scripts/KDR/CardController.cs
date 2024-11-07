@@ -5,9 +5,12 @@ using UnityEngine.EventSystems;
 
 public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private List<Card> _removedCards;
-    private List<Card> _cards;
+    private List<CardUI> _removedCards;
+    private List<CardUI> _cards;
 
+    private float _targetAngleInterval;
+    private float _targetXPosInterval;
+    private float _targetYPosInterval;
     public float angleInterval;
     public float xPosInterval;
     public float yPosInterval;
@@ -20,14 +23,16 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private bool _isOpen = false;
 
+    [SerializeField] private CardUI _cardPrefab;
+
     [field: SerializeField] public Transform UseAreaTrm { get; private set; }
 
     private void Awake()
     {
         _rectTrm = transform as RectTransform;
         _startSize = _rectTrm.sizeDelta;
-        _cards = new List<Card>();
-        _removedCards = new List<Card>();
+        _cards = new List<CardUI>();
+        _removedCards = new List<CardUI>();
         GetComponentsInChildren(_cards);
 
         int cardCount = _cards.Count;
@@ -37,8 +42,8 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
             float interval = i - (float)cardCount / 2;
 
-            _cards[i].transform.localRotation = Quaternion.Euler(0, 0, -interval * angleInterval);
-            _cards[i].VisualTrm.anchoredPosition = new Vector2(interval * xPosInterval, yPosInterval);
+            _cards[i].transform.localRotation = Quaternion.Euler(0, 0, -interval * _targetAngleInterval);
+            _cards[i].VisualTrm.anchoredPosition = new Vector2(interval * _targetXPosInterval, _targetYPosInterval);
         }
     }
 
@@ -58,12 +63,12 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             float interval = i - (cardCount / 2 - (cardCount % 2 == 0 ? 0.5f : 0));
 
             _cards[i].VisualTrm.anchoredPosition = Vector2.Lerp(_cards[i].VisualTrm.anchoredPosition,
-                new Vector2(interval * xPosInterval, yPosInterval), Time.deltaTime * 10);
+                new Vector2(interval * _targetXPosInterval, _targetYPosInterval), Time.deltaTime * 10);
 
             if (_cards[i].IsHolded == false)
             {
                 _cards[i].transform.localRotation = Quaternion.Lerp(_cards[i].transform.localRotation,
-                    Quaternion.Euler(0, 0, -interval * angleInterval), Time.deltaTime * 10);
+                    Quaternion.Euler(0, 0, -interval * _targetAngleInterval), Time.deltaTime * 10);
                 _cards[i].transform.localPosition = Vector2.Lerp(_cards[i].transform.localPosition,
                     Vector3.zero, Time.deltaTime * 10); 
             }
@@ -76,7 +81,17 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         }
     }
 
-    public void SetSelectCard(Card card, bool isOn)
+    public void AddCard(CardSO cardSO, bool isPenance = false)
+    {
+        CardUI card = Instantiate(_cardPrefab, transform);
+        card.transform.localPosition = Vector3.zero;
+        card.cardSO = cardSO;
+        card.Init(this);
+        if (isPenance) card.SetCost(0);
+        _cards.Add(card);
+    }
+
+    public void SetSelectCard(CardUI card, bool isOn)
     {
         UseAreaTrm.gameObject.SetActive(isOn);
 
@@ -91,9 +106,9 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         _isOpen = true;
         _spreadTime = Time.time;
-        angleInterval = 6f;
-        yPosInterval = 500f;
-        xPosInterval = 250f;
+        _targetAngleInterval = angleInterval;
+        _targetYPosInterval = yPosInterval;
+        _targetXPosInterval = xPosInterval;
         _rectTrm.sizeDelta = new Vector2(1500 * ((float)_cards.Count / 5), 1300);
     }
 
@@ -101,9 +116,9 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         _isOpen = false;
         _spreadTime = Time.time;
-        angleInterval = 0f;
-        xPosInterval = 0f;
-        yPosInterval = 0f;
+        _targetAngleInterval = 0f;
+        _targetXPosInterval = 0f;
+        _targetYPosInterval = 0f;
         _rectTrm.sizeDelta = _startSize;
     }
 }

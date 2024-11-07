@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bca8c441d62458b439e68ac64a9ccaa5, type: 3}
+  m_Name: TextCardSO 1
+  m_EditorClassIdentifier: 
+  name: "<color=blue>\uD14C\uC2A4\uD2B8 \uCE74\uB4DC</color>"
+  cost: 0
+  image: {fileID: 21300000, guid: 6f37450882441524bb03ec646631a43b, type: 3}
+  cardDescription: "\uC774 \uCE74\uB4DC\uB294 \uAE40\uB3D9\uB960\uC774 \uD14C\uC2A4\uD2B8
+    \uD558\uAE30 \uC704\uD574 \uB9CC\uB4E4\uC5B4\uC9C4 \uCE74\uB4DC\uC774\uB2E4.
+    \uC774\uBBF8\uC9C0 \uB610\uD55C \uC544\uBB34\uAC70\uB098 \uAC00\uC838\uB2E4 \uB07C\uC6B4\uAC70\uB2E4. "
