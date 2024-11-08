@@ -60,6 +60,8 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     private Sequence _turnSeq;
 
+    private int _cost;
+
     public void Init(CardController controller, int index)
     {
         _cardIndex = index;
@@ -74,7 +76,8 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         _curseTags = _elementsTrm.Find("CurseTag");
         _blessingTags = _elementsTrm.Find("BlessingTag");
 
-        _costText.text = cardSO.cost.ToString();
+        _cost = cardSO.cost;
+        _costText.text = _cost.ToString();
         _nameText.text = cardSO.name;
         _descriptionText.text = cardSO.cardDescription;
         _image.sprite = cardSO.image;
@@ -120,6 +123,9 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         IsSelectable = false;
         IsFront = isFront;
 
+        if (isFront == false)
+            VisualImage.color = Color.white;
+
         _turnSeq.Append(VisualTrm.DOScaleX(0, 0.1f))
             .AppendCallback(() =>
             {
@@ -132,13 +138,16 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void CostModify(int cost, Color color = default)
     {
-        _costText.text = Mathf.Clamp(cardSO.cost + cost, 0, 10).ToString();
+        _cost = Mathf.Clamp(_cost + cost, 0, 10);
+        _costText.text = _cost.ToString();
         if (color != default)
             _costText.color = color;
     }
 
-    public void Use()
+    public bool Use()
     {
+        if (_contoller.TryUseCost(_cost) == false) return false;
+
         if (blessing.Contains(Blessing.Penance)) _contoller.AddCard(cardSO, true);
         if (curse.Contains(Curse.Envy))
         {
@@ -147,6 +156,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         }
         Debug.Log("Use!");
         Destroy(gameObject);
+        return true;
     }
 
     public void UpdateUseable()
