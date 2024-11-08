@@ -4,15 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public enum StageType
-{
-	None,
-	Battle,
-	Store,
-	BlackMarket,
-	Boss
-}
-
 namespace StageMapGenerator
 {
 	[System.Serializable]

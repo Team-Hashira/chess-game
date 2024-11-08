@@ -11,24 +11,20 @@ namespace StageMapGenerator
 
 		public void OnClick()
 		{
-			Debug.Log("OnClick");
 		}
 
 		public void OnSelectEnter()
 		{
-			Debug.Log("OnSelectEnter");
 			if (canSeledable == false) return;
 			transform.DOScale(_selectedScale, _duration);
 		}
 
 		public void OnSelect()
 		{
-			Debug.Log("OnSelect");
 		}
 
 		public void OnSelectExit()
 		{
-			Debug.Log("OnSelectExit");
 			if (canSeledable == false) return;
 			transform.DOScale(1f, _duration);
 		}
