@@ -37,7 +37,7 @@ namespace StageMapGenerator
 		public int edgePerent = 30;
 
 		[SerializeField] private Line _linePrefab;
-		[SerializeField] private GameObject _IconPrefab;
+		[SerializeField] private Node _nodePrefab;
 
 		private int stageTypeMaxCount;
 
@@ -82,7 +82,7 @@ namespace StageMapGenerator
 					new Vector2(firstRanPos[i], 0) * interval 
 					+ UnityEngine.Random.insideUnitCircle * ranWorldOffset;
 
-				var icon = Instantiate(_IconPrefab, stage.posAtWorld, Quaternion.identity);
+				var icon = Instantiate(_nodePrefab, stage.posAtWorld, Quaternion.identity);
 				icon.transform.SetParent(transform, true);
 				AddRandomTarget(0, firstRanPos[i]);
 			}
@@ -135,7 +135,7 @@ namespace StageMapGenerator
 					new Vector2(curX, curY) * interval
 					+ UnityEngine.Random.insideUnitCircle * ranWorldOffset;
 
-				var icon = Instantiate(_IconPrefab, stage.posAtWorld, Quaternion.identity);
+				var icon = Instantiate(_nodePrefab, stage.posAtWorld, Quaternion.identity);
 				icon.transform.SetParent(transform, true);
 
 			}
