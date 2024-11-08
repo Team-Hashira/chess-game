@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -23,7 +24,11 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private bool _isOpen = false;
 
+    private int _currentCost = 10;
+    [SerializeField] private int _targetCost = 10;
+
     [SerializeField] private CardUI _cardPrefab;
+    [SerializeField] private TextMeshProUGUI _costText;
 
     [field: SerializeField] public Transform UseAreaTrm { get; private set; }
 
@@ -83,6 +88,24 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
                 cards[i].UpdateUseable();
             }
         }
+
+
+        UpdateCost();
+    }
+
+    public bool TryUseCost(int amount)
+    {
+        if (_targetCost < amount) return false;
+
+        _targetCost -= amount;
+        return true;
+    }
+
+    public void UpdateCost()
+    {
+        if (_currentCost < _targetCost) _currentCost++;
+        else if (_currentCost > _targetCost) _currentCost--;
+        _costText.text = $"Cost : {_currentCost.ToString()}";
     }
 
     public void AddCard(CardSO cardSO, bool isPenance = false)
@@ -101,8 +124,10 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
         if (isOn == false && card.IsUseable)
         {
-            _removedCards.Add(card);
-            card.Use();
+            if (card.Use())
+            {
+                _removedCards.Add(card);
+            }
         }
     }
 

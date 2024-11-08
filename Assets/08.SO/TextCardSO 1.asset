@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TextCardSO 1
   m_EditorClassIdentifier: 
   name: "<color=blue>\uD14C\uC2A4\uD2B8 \uCE74\uB4DC</color>"
-  cost: 0
+  cost: 1
   image: {fileID: 21300000, guid: 6f37450882441524bb03ec646631a43b, type: 3}
   cardDescription: "\uC774 \uCE74\uB4DC\uB294 \uAE40\uB3D9\uB960\uC774 \uD14C\uC2A4\uD2B8
     \uD558\uAE30 \uC704\uD574 \uB9CC\uB4E4\uC5B4\uC9C4 \uCE74\uB4DC\uC774\uB2E4.
