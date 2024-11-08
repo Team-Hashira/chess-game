@@ -40,7 +40,6 @@ public class Board : MonoBehaviour
                     Square square = new Square();
                     square.position = new Vector2(i + 0.5f, y + 0.5f) + offset;
                     _squares[y - _offset.y, i - _offset.x] = square;
-                    Debug.DrawLine(square.position - Vector2.one * 0.5f, square.position + Vector2.one * 0.5f, Color.red, 100);
                 }
             }
         }
