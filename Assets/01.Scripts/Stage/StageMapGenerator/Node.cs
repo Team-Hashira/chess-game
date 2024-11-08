@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace StageMapGenerator
+namespace StageMap
 {
 	public class Node : MonoBehaviour, ISelectableObject
 	{

@@ -712,6 +712,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2125795110}
+  - component: {fileID: 2125795111}
   m_Layer: 0
   m_Name: StageController
   m_TagString: Untagged
@@ -728,12 +729,25 @@ Transform:
   m_GameObject: {fileID: 2125795109}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.6052146, y: 6.9824824, z: -0.021838224}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2125795111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125795109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef6f5bea04d073a4f933876bc3c61abf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _stageMapGenerator: {fileID: 236032568}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -741,7 +755,7 @@ SceneRoots:
   - {fileID: 348118191}
   - {fileID: 1436658046}
   - {fileID: 171813903}
-  - {fileID: 1432667956}
   - {fileID: 236032569}
-  - {fileID: 368189431}
   - {fileID: 2125795110}
+  - {fileID: 368189431}
+  - {fileID: 1432667956}

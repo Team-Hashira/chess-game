@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace StageMapGenerator
+namespace StageMap
 {
 	public class Line : MonoBehaviour
 	{

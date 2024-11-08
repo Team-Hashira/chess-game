@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(StageMapGenerator.StageMapGenerator))]
+[CustomEditor(typeof(StageMap.StageMapGenerator))]
 public class StageMapGeneratorEditor : Editor
 {
 	public override void OnInspectorGUI()
@@ -18,7 +18,7 @@ public class StageMapGeneratorEditor : Editor
 				return;
 			}
 
-			(target as StageMapGenerator.StageMapGenerator).GenerateMap();
+			(target as StageMap.StageMapGenerator).GenerateMap();
 		}
 	}
 }
