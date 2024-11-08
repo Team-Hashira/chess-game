@@ -28,119 +28,44 @@ public partial class @Controls: IInputActionCollection2, IDisposable
             ""id"": ""885aff4d-10ac-48e3-b052-ff74ebd58c74"",
             ""actions"": [
                 {
-                    ""name"": ""Dash"",
+                    ""name"": ""LeftMouseClick"",
                     ""type"": ""Button"",
-                    ""id"": ""2f32c5e7-314c-4e11-9bbb-147493b71862"",
-                    ""expectedControlType"": ""Button"",
+                    ""id"": ""176b614d-fb72-4be3-96ba-49c83c7c2045"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Move"",
+                    ""name"": ""MouseMove"",
                     ""type"": ""Value"",
-                    ""id"": ""a5129431-4049-4fbe-b3a0-9cd5bc8d8c0f"",
+                    ""id"": ""f645adc8-1b65-4a43-b4e1-ff248276a220"",
                     ""expectedControlType"": ""Vector3"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
-                },
-                {
-                    ""name"": ""Attack"",
-                    ""type"": ""Button"",
-                    ""id"": ""ba14dfe1-f2aa-4737-94d4-b9f8a17c2f92"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""5bdf08ba-70b0-4627-851d-b6d253ea62e5"",
-                    ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""39c7527d-39c9-4d1b-a6e0-61e322d22e15"",
-                    ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Dash"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""WASD"",
-                    ""id"": ""522368b1-f51f-4629-a67f-ca0fc1486429"",
-                    ""path"": ""3DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""cd7bcceb-b7c1-4f27-8130-4f029ebfead2"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""0c80e206-49db-4ee9-bb35-d6d735bcf203"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""forward"",
-                    ""id"": ""b0043a45-daa6-4435-88b1-4c424c494e85"",
-                    ""path"": ""<Keyboard>/w"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""backward"",
-                    ""id"": ""12db6050-6756-45a5-a312-cab92980d307"",
-                    ""path"": ""<Keyboard>/s"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Move"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""89a8e9cd-66f1-4370-b894-737bd44b2229"",
+                    ""id"": ""663c6c0a-b225-491c-9ff4-99de50ac06f1"",
                     ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Attack"",
+                    ""action"": ""LeftMouseClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4106eaee-69c5-43ca-ac8e-e09884731d03"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""MouseMove"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -154,7 +79,7 @@ public partial class @Controls: IInputActionCollection2, IDisposable
                     ""name"": ""MouseClick"",
                     ""type"": ""Button"",
                     ""id"": ""fc274dc2-f1ee-49d2-8203-386a5c0bbcf1"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
@@ -179,9 +104,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Dash = m_Player.FindAction("Dash", throwIfNotFound: true);
-        m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
-        m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
+        m_Player_LeftMouseClick = m_Player.FindAction("LeftMouseClick", throwIfNotFound: true);
+        m_Player_MouseMove = m_Player.FindAction("MouseMove", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_MouseClick = m_UI.FindAction("MouseClick", throwIfNotFound: true);
@@ -252,16 +176,14 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     // Player
     private readonly InputActionMap m_Player;
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
-    private readonly InputAction m_Player_Dash;
-    private readonly InputAction m_Player_Move;
-    private readonly InputAction m_Player_Attack;
+    private readonly InputAction m_Player_LeftMouseClick;
+    private readonly InputAction m_Player_MouseMove;
     public struct PlayerActions
     {
         private @Controls m_Wrapper;
         public PlayerActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Dash => m_Wrapper.m_Player_Dash;
-        public InputAction @Move => m_Wrapper.m_Player_Move;
-        public InputAction @Attack => m_Wrapper.m_Player_Attack;
+        public InputAction @LeftMouseClick => m_Wrapper.m_Player_LeftMouseClick;
+        public InputAction @MouseMove => m_Wrapper.m_Player_MouseMove;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -271,28 +193,22 @@ public partial class @Controls: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_PlayerActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_PlayerActionsCallbackInterfaces.Add(instance);
-            @Dash.started += instance.OnDash;
-            @Dash.performed += instance.OnDash;
-            @Dash.canceled += instance.OnDash;
-            @Move.started += instance.OnMove;
-            @Move.performed += instance.OnMove;
-            @Move.canceled += instance.OnMove;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
+            @LeftMouseClick.started += instance.OnLeftMouseClick;
+            @LeftMouseClick.performed += instance.OnLeftMouseClick;
+            @LeftMouseClick.canceled += instance.OnLeftMouseClick;
+            @MouseMove.started += instance.OnMouseMove;
+            @MouseMove.performed += instance.OnMouseMove;
+            @MouseMove.canceled += instance.OnMouseMove;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
         {
-            @Dash.started -= instance.OnDash;
-            @Dash.performed -= instance.OnDash;
-            @Dash.canceled -= instance.OnDash;
-            @Move.started -= instance.OnMove;
-            @Move.performed -= instance.OnMove;
-            @Move.canceled -= instance.OnMove;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
+            @LeftMouseClick.started -= instance.OnLeftMouseClick;
+            @LeftMouseClick.performed -= instance.OnLeftMouseClick;
+            @LeftMouseClick.canceled -= instance.OnLeftMouseClick;
+            @MouseMove.started -= instance.OnMouseMove;
+            @MouseMove.performed -= instance.OnMouseMove;
+            @MouseMove.canceled -= instance.OnMouseMove;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -358,9 +274,8 @@ public partial class @Controls: IInputActionCollection2, IDisposable
     public UIActions @UI => new UIActions(this);
     public interface IPlayerActions
     {
-        void OnDash(InputAction.CallbackContext context);
-        void OnMove(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
+        void OnLeftMouseClick(InputAction.CallbackContext context);
+        void OnMouseMove(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
