@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_ShopSceneJYC : UI_Scene
+public class UI_ShopScene : UI_Scene
 {
     public enum Images
     {
