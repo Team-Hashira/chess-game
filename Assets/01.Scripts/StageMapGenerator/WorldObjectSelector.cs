@@ -10,23 +10,23 @@ public class WorldObjectSelector : MonoBehaviour
 
 	private void Awake()
 	{
-		_inputReader.MouseClickEvent += OnMouseClick;
-		_inputReader.MouseMoveEvent += OnMouseMove;
+		_inputReader.OnLeftMouseClickEvent += OnMouseClick;
+		_inputReader.OnMouseMoveEvent += OnMouseMove;
 	}
 
 	private void OnDestroy()
 	{
-		_inputReader.MouseClickEvent -= OnMouseClick;
-		_inputReader.MouseMoveEvent -= OnMouseMove;
+		_inputReader.OnLeftMouseClickEvent -= OnMouseClick;
+		_inputReader.OnMouseMoveEvent -= OnMouseMove;
 	}
 
-	private void OnMouseClick()
+	private void OnMouseClick(bool mouseClick)
 	{
 		if (curSelectedObject != null)
 			curSelectedObject.OnClick();
 	}
 
-	private void OnMouseMove(Vector2 mousePos)
+	private void OnMouseMove(Vector3 mousePos)
 	{
 		ISelectableObject obj = GetSelectableObject();
 		if (curSelectedObject != null && obj != curSelectedObject)
@@ -39,10 +39,14 @@ public class WorldObjectSelector : MonoBehaviour
 			curSelectedObject = obj;
 			curSelectedObject.OnSelectEnter();
 		}
-		else if (curSelectedObject != null) {
+	}
+
+	private void Update()
+	{
+		if (curSelectedObject != null)
+		{
 			curSelectedObject.OnSelect();
 		}
-
 	}
 
 	private ISelectableObject GetSelectableObject()
