@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
 public enum Curse
 {
     Destruction,
@@ -11,7 +11,6 @@ public enum Curse
     Belonging,
     Regret,
 }
-[System.Serializable]
 public enum Blessing
 {
     Charity,
@@ -20,8 +19,10 @@ public enum Blessing
     Penance,
 }
 
+[System.Serializable]
 public class Card
 {
+    public Guid guid;
     public List<Curse> curse;
     public List<Blessing> blessing;
 }
