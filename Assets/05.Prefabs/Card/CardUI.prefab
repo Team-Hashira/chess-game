@@ -1290,7 +1290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   curse: 
   blessing: 
-  cardSO: {fileID: 11400000, guid: b49f28898d7b877428fd0be2b43bee83, type: 2}
+  cardSO: {fileID: 11400000, guid: d2459b9c4d8a423459dc72b7b1d93013, type: 2}
   _forntSprite: {fileID: 21300000, guid: f0ef1e0cdbe5ab24ca9e45402245f5da, type: 3}
   _backSprite: {fileID: 21300000, guid: f0ef1e0cdbe5ab24ca9e45402245f5da, type: 3}
 --- !u!1 &3201172202834110401

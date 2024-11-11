@@ -1,30 +1,12 @@
 using DG.Tweening;
 using System.Collections.Generic;
+using System.Data.SqlTypes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[System.Serializable]
-public enum Curse
-{
-    Destruction,
-    Pride,
-    Envy,
-    Gluttony,
-    Belonging,
-    Regret,
-}
-[System.Serializable]
-public enum Blessing
-{
-    Charity,
-    Resection,
-    Love,
-    Penance,
-}
-
-public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
+public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     public List<Curse> curse;
     public List<Blessing> blessing;
@@ -61,6 +43,20 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     private Sequence _turnSeq;
 
     private int _cost;
+
+    private void Update()
+    {
+        if (LockedLevel == 0)
+        {
+            if (IsHolded)
+            {
+                transform.position = Input.mousePosition - (Vector3)_startOffset;
+                VisualTrm.localRotation = Quaternion.Lerp(VisualTrm.localRotation,
+                    Quaternion.Inverse(transform.localRotation), Time.deltaTime * 10);
+                UpdateUseable();
+            }
+        }
+    }
 
     public void Init(CardController controller, int index)
     {
@@ -108,6 +104,18 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             _blessingTags.GetChild((int)tag).gameObject.SetActive(true);
         }
     }
+    public void UpdateArray(float interval, float targetXPosInterval, float targetYPosInterval, float targetAngleInterval)
+    {
+        if (IsHolded) return;
+        VisualTrm.anchoredPosition = Vector2.Lerp(VisualTrm.anchoredPosition,
+            new Vector2(interval * targetXPosInterval, targetYPosInterval), Time.deltaTime * 10);
+        transform.localRotation = Quaternion.Lerp(transform.localRotation,
+            Quaternion.Euler(0, 0, -interval * targetAngleInterval), Time.deltaTime * 10);
+        transform.localPosition = Vector2.Lerp(transform.localPosition,
+            Vector3.zero, Time.deltaTime * 10);
+        VisualTrm.localRotation = Quaternion.Lerp(VisualTrm.localRotation,
+            Quaternion.identity, Time.deltaTime * 10);
+    }
 
     public void Lock(bool isLock)
     {
@@ -122,9 +130,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
         IsSelectable = false;
         IsFront = isFront;
-
-        if (isFront == false)
-            VisualImage.color = Color.white;
 
         _turnSeq.Append(VisualTrm.DOScaleX(0, 0.1f))
             .AppendCallback(() =>
@@ -165,14 +170,8 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         if (IsUseable != newValue)
         {
             IsUseable = newValue;
-            VisualImage.color = IsUseable ? Color.blue : Color.white;
+            VisualImage.color = IsUseable ? Color.blue : (LockedLevel != 0 ? Color.gray : Color.white);
         }
-    }
-
-    public void OnDrag(PointerEventData eventData)
-    {
-        if (LockedLevel != 0) return;
-        transform.position = eventData.position - _startOffset;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -193,7 +192,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         //VisualTrm.DOAnchorPosY(_visualDefaultYPos, 0.1f);
     }
 
-    public void OnBeginDrag(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)
     {
         if (LockedLevel != 0) return;
         IsHolded = true;
@@ -201,10 +200,11 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         _startOffset = eventData.position - (Vector2)transform.position;
     }
 
-    public void OnEndDrag(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)
     {
         if (LockedLevel != 0) return;
         IsHolded = false;
+        VisualImage.color = LockedLevel != 0 ? Color.gray : Color.white;
         _contoller.SetSelectCard(this, false);
     }
 }

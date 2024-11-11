@@ -70,23 +70,7 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             if (cards[i].IsFront != _isOpen) cards[i].Turn(_isOpen);
 
             float interval = i - (cardCount / 2 - (cardCount % 2 == 0 ? 0.5f : 0));
-
-            cards[i].VisualTrm.anchoredPosition = Vector2.Lerp(cards[i].VisualTrm.anchoredPosition,
-                new Vector2(interval * _targetXPosInterval, _targetYPosInterval), Time.deltaTime * 10);
-
-            if (cards[i].IsHolded == false)
-            {
-                cards[i].transform.localRotation = Quaternion.Lerp(cards[i].transform.localRotation,
-                    Quaternion.Euler(0, 0, -interval * _targetAngleInterval), Time.deltaTime * 10);
-                cards[i].transform.localPosition = Vector2.Lerp(cards[i].transform.localPosition,
-                    Vector3.zero, Time.deltaTime * 10);
-            }
-            else
-            {
-                //_cards[i].transform.localRotation = Quaternion.Lerp(_cards[i].transform.localRotation,
-                //    Quaternion.identity, Time.deltaTime * 8);
-                cards[i].UpdateUseable();
-            }
+            cards[i].UpdateArray(interval, _targetXPosInterval, _targetYPosInterval, _targetAngleInterval);
         }
 
 
@@ -133,6 +117,7 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (UseAreaTrm.gameObject.activeSelf) return;
         _isOpen = true;
         _spreadTime = Time.time;
         _targetAngleInterval = angleInterval;
@@ -143,6 +128,7 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (UseAreaTrm.gameObject.activeSelf) return;
         _isOpen = false;
         _spreadTime = Time.time;
         _targetAngleInterval = 0f;
