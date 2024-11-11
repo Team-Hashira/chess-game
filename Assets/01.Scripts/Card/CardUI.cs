@@ -5,25 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-[System.Serializable]
-public enum Curse
-{
-    Destruction,
-    Pride,
-    Envy,
-    Gluttony,
-    Belonging,
-    Regret,
-}
-[System.Serializable]
-public enum Blessing
-{
-    Charity,
-    Resection,
-    Love,
-    Penance,
-}
-
 public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public List<Curse> curse;
