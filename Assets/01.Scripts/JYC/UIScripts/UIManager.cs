@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour 
 {
-    private int _order = 10;
+    //private int _order = 10;
 
     private UI_Scene _sceneUI = null;
 

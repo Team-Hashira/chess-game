@@ -29,7 +29,7 @@ public class UI_ShopScene : UI_Scene
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.P))
-            GetImages((int)Images.Image_ShopBackGround).transform.position = new Vector3(-2000, 0, 0);
+            GetImages((int)Images.Image_ShopBackGround).transform.position = new Vector3(-2000, 0, 0); // 이것도 지금은 임시로 넣어놓은거
 
         GetTexts((int)Texts.Text_Coin).text = Managers.Coin.SetCoin().ToString(); // 이건 수정할거임
     }
