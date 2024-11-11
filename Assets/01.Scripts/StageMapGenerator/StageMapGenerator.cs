@@ -4,15 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public enum StageType
-{
-	None,
-	Battle,
-	Store,
-	BlackMarket,
-	Boss
-}
-
 namespace StageMapGenerator
 {
 	[System.Serializable]
@@ -30,7 +21,6 @@ namespace StageMapGenerator
 		public Dictionary<StageType, int> _stageOfCountMap;
 
 		public int startStageCount = 2;
-		public int edgeCount = 30;
 		public int maxDepth = 7;
 		public int maxRange = 5;
 		public float interval = 2;
@@ -38,7 +28,7 @@ namespace StageMapGenerator
 		public int edgePerent = 30;
 
 		[SerializeField] private Line _linePrefab;
-		[SerializeField] private GameObject _IconPrefab;
+		[SerializeField] private Node _nodePrefab;
 
 		private int stageTypeMaxCount;
 
@@ -78,8 +68,12 @@ namespace StageMapGenerator
 				Stage stage = _map[0, firstRanPos[i]];
 				//처음은 무조건 전투 스테이지
 				stage.stageType = StageType.Battle;
-				stage.posAtWorld = new Vector2(firstRanPos[i], 0) * interval + UnityEngine.Random.insideUnitCircle * ranWorldOffset;
-				var icon = Instantiate(_IconPrefab, stage.posAtWorld, Quaternion.identity);
+
+				stage.posAtWorld = 
+					new Vector2(firstRanPos[i], 0) * interval 
+					+ UnityEngine.Random.insideUnitCircle * ranWorldOffset;
+
+				var icon = Instantiate(_nodePrefab, stage.posAtWorld, Quaternion.identity);
 				icon.transform.SetParent(transform, true);
 				AddRandomTarget(0, firstRanPos[i]);
 			}
@@ -98,6 +92,7 @@ namespace StageMapGenerator
 			Camera.main.transform.position = new Vector3(_mapCenter.x, _mapCenter.y, -10);
 		}
 
+		//ranAmount까지의 모든 숫자를 랜덤한 순서로 섞은 배열을 리턴합니다.
 		private int[] RandomPos(int range, int ranAmount = 5)
 		{
 			int[] positions = new int[range];
@@ -108,7 +103,8 @@ namespace StageMapGenerator
 
 			for (int i = 0; i < ranAmount; i++)
 			{
-				int pos1 = UnityEngine.Random.Range(0, range), pos2 = UnityEngine.Random.Range(0, range);
+				int pos1 = UnityEngine.Random.Range(0, range);
+				int pos2 = UnityEngine.Random.Range(0, range);
 
 				int temp = positions[pos1];
 				positions[pos1] = positions[pos2];
@@ -130,7 +126,7 @@ namespace StageMapGenerator
 					new Vector2(curX, curY) * interval
 					+ UnityEngine.Random.insideUnitCircle * ranWorldOffset;
 
-				var icon = Instantiate(_IconPrefab, stage.posAtWorld, Quaternion.identity);
+				var icon = Instantiate(_nodePrefab, stage.posAtWorld, Quaternion.identity);
 				icon.transform.SetParent(transform, true);
 
 			}
@@ -208,7 +204,6 @@ namespace StageMapGenerator
 				stage = q.Dequeue();
 
 				for (int i = 0; i < stage.targets.Count; i++)
-				{
 					if(stage.visitCount < stage.targets.Count)
 					{
 						stage.visitCount++;
@@ -217,8 +212,8 @@ namespace StageMapGenerator
 						line.TargetTo(stage.targets[i].posAtWorld);
 						q.Enqueue(stage.targets[i]);
 					}
-				}
 			}
 		}
+
 	}
 }

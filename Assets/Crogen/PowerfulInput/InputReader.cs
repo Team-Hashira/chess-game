@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DG.Tweening;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,11 +9,9 @@ namespace Crogen.PowerfulInput
     public class InputReader : ScriptableObject, Controls.IPlayerActions
     {
         #region Input Event
-
-        public event Action<Vector3> MoveEvent;
-        public event Action DashEvent;
-        public event Action AttackEvent;
-
+        public event Action<bool> OnLeftMouseClickEvent;
+        public event Action<Vector3> OnMouseMoveEvent;
+        public Vector3 MousePosition { get; private set; }
         #endregion
 
         private Controls _controls;
@@ -32,21 +31,19 @@ namespace Crogen.PowerfulInput
             _controls.Disable();
         }
 
-        public void OnDash(InputAction.CallbackContext context)
+        public void OnLeftMouseClick(InputAction.CallbackContext context)
         {
-            if(context.performed)
-                DashEvent?.Invoke();
+            if (context.performed)
+                OnLeftMouseClickEvent?.Invoke(true);
+            else if (context.canceled)
+                OnLeftMouseClickEvent?.Invoke(false);
         }
 
-        public void OnMove(InputAction.CallbackContext context)
+        public void OnMouseMove(InputAction.CallbackContext context)
         {
-            MoveEvent?.Invoke(context.ReadValue<Vector3>());
-        }
-
-        public void OnAttack(InputAction.CallbackContext context)
-        {
-            if(context.performed)
-                AttackEvent?.Invoke();
+            MousePosition = context.ReadValue<Vector2>();
+            MousePosition = new Vector3(MousePosition.x, MousePosition.y, -Camera.main.transform.position.z);
+            OnMouseMoveEvent?.Invoke(MousePosition);
         }
     }
 }
