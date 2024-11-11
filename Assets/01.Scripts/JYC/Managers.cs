@@ -11,6 +11,8 @@ public class Managers : MonoBehaviour
     private static Managers s_instance;
     private static Managers Instance { get { Init(); return s_instance; } }
 
+
+    //여기에 Manager를 등록해주세요.
     #region Content
 
     #endregion
