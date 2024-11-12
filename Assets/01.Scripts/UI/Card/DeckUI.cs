@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     private List<CardUI> _removedCards;
     public List<CardUI> cards;
@@ -32,18 +32,21 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     [field: SerializeField] public Transform UseAreaTrm { get; private set; }
 
+    private List<Card> CardDataList => DeckManager.GetCurrentCards();
+
     private void Awake()
     {
-        _rectTrm = transform as RectTransform;
+		_rectTrm = transform as RectTransform;
         _startSize = _rectTrm.sizeDelta;
         cards = new List<CardUI>();
         _removedCards = new List<CardUI>();
         GetComponentsInChildren(cards);
 
-        int cardCount = cards.Count;
-        for (int i = 0; i < cardCount; i++)
+		int cardCount = cards.Count;
+
+		for (int i = 0; i < cardCount; i++)
         {
-            cards[i].Init(this, i);
+			cards[i].Init(this, CardDataList[i], i);
 
             float interval = i - (float)cardCount / 2;
 
@@ -92,12 +95,13 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         _costText.text = $"Cost : {_currentCost.ToString()}";
     }
 
-    public void AddCard(CardSO cardSO, bool isPenance = false)
+    public void AddCard(Card cardData, bool isPenance = false)
     {
         CardUI card = Instantiate(_cardPrefab, transform);
         card.transform.localPosition = Vector3.zero;
-        card.cardSO = cardSO;
-        card.Init(this, cards.Count);
+
+        card.Init(this, cardData, cards.Count);
+
         if (isPenance) card.CostModify(-10, Color.yellow);
         cards.Add(card);
     }
@@ -108,7 +112,7 @@ public class CardController : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
         if (isOn == false && card.IsUseable)
         {
-            if (card.Use())
+            if (card.TryUse())
             {
                 _removedCards.Add(card);
             }

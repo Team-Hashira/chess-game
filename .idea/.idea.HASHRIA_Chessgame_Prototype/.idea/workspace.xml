@@ -5,26 +5,32 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="df5dd416-3655-44d8-ac92-f27c0ddc85b0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Agent.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Agent/ChessMovement.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Agent/ChessMovement.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Agent/Player.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Agent/Player/Black.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Agent/Player/Black.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Agent/Player/White.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Agent/Player/White.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Core.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Core/ChessController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Core/ChessController.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Core/GameManager.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Core/GameManager.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Core/PlayersController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/01.Scripts/Core/PlayersController.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Crogen/AgentFSM/Movement/IChessMovement.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Crogen/AgentFSM/Movement/IChessMovement.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.HASHRIA_Chessgame_Prototype/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.HASHRIA_Chessgame_Prototype/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/00.Scenes/CardTest/KDR.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/00.Scenes/CardTest/KDR.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/Card.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/Card.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/CardController.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/CardController.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/CardListSO.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/CardListSO.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/CardSO.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/CardSO.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/CardUI.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/CardUI.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/Deck.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/Deck/CardManager.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/Deck/CardManager.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/Deck/DeckCardUI.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/Deck/DeckCardUI.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/Deck/DeckUI.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/01.Scripts/Card/Deck/DeckUI.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/05.Prefabs/Card/CardUI.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/05.Prefabs/Card/CardUI.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/08.SO/Card/TextCardSO 1.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/08.SO/Card/TextCardSO 1.asset.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/08.SO/Card/TextCardSO.asset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/08.SO/Card/TextCardSO.asset.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/DNFBitBitTTF SDF.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/DNFBitBitTTF SDF.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/SampleScene.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,6 +40,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Crogen0407"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/Team-Hashira/chess-game.git",
+    "accountId": "2557df7b-085b-453a-8d1c-29d239189803"
+  }
+}]]></component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/02d0c834346f4134b7dabbeb6d71bf4bc400/e9/b549b79d/Tilemap.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b5bf0c891ea345fe93688f835df32fdc1dda00/1a/981d3320/Object.cs" root0="FORCE_HIGHLIGHTING" />
@@ -55,21 +73,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "Crogen",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="C:\Program Files\Unity\Hub\Editor\6000.0.24f1\Editor\Unity.exe" />
@@ -121,6 +139,7 @@
       <workItem from="1730086533477" duration="4623000" />
       <workItem from="1730154180132" duration="102000" />
       <workItem from="1730186857856" duration="17302000" />
+      <workItem from="1731443830910" duration="675000" />
     </task>
     <servers />
   </component>

@@ -384,7 +384,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -21}
+  m_AnchoredPosition: {x: 0, y: -19.5}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4831925459999847648
@@ -450,7 +450,7 @@ MonoBehaviour:
   m_fontSizeMax: 72
   m_fontStyle: 0
   m_HorizontalAlignment: 2
-  m_VerticalAlignment: 512
+  m_VerticalAlignment: 8192
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -1288,11 +1288,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45749015c2b9ce54889cd622255883a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curse: 
-  blessing: 
-  cardSO: {fileID: 11400000, guid: d2459b9c4d8a423459dc72b7b1d93013, type: 2}
   _forntSprite: {fileID: 21300000, guid: f0ef1e0cdbe5ab24ca9e45402245f5da, type: 3}
   _backSprite: {fileID: 21300000, guid: f0ef1e0cdbe5ab24ca9e45402245f5da, type: 3}
+  _elementsTrm: {fileID: 5394919288677204513}
+  _costText: {fileID: 986111186464334725}
+  _nameText: {fileID: 8937147620662516290}
+  _descriptionText: {fileID: 2396404188539129892}
+  _image: {fileID: 4036709763402032980}
+  _curseTags: {fileID: 8377866477642495927}
+  _blessingTags: {fileID: 8381812115422231908}
 --- !u!1 &3201172202834110401
 GameObject:
   m_ObjectHideFlags: 0

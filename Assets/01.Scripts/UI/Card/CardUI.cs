@@ -1,6 +1,4 @@
 using DG.Tweening;
-using System.Collections.Generic;
-using System.Data.SqlTypes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -8,8 +6,7 @@ using UnityEngine.UI;
 
 public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    public List<Curse> curse;
-    public List<Blessing> blessing;
+    private Card cardData;
 
     public bool OnSelected { get; private set; }
     public bool IsSelectable { get; private set; }
@@ -18,33 +15,38 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     public bool IsUseable { get; private set; }
     public bool IsFront { get; private set; }
 
-    public RectTransform VisualTrm { get; private set; }
-    public Image VisualImage { get; private set; }
-    private Transform _elementsTrm;
-
-    public CardSO cardSO;
-
     [SerializeField] private Sprite _forntSprite;
     [SerializeField] private Sprite _backSprite;
 
-    private TextMeshProUGUI _costText;
-    private TextMeshProUGUI _nameText;
-    private TextMeshProUGUI _descriptionText;
-    private Image _image;
-    private Transform _curseTags;
-    private Transform _blessingTags;
+    [Space(25)]
+	[SerializeField] private Transform _elementsTrm;
+    [SerializeField] private TextMeshProUGUI _costText;
+    [SerializeField] private TextMeshProUGUI _nameText;
+    [SerializeField] private TextMeshProUGUI _descriptionText;
+    [SerializeField] private Image _image;
+    [SerializeField] private Transform _curseTags;
+    [SerializeField] private Transform _blessingTags;
+
+	public RectTransform VisualTrm { get; private set; }
+    public Image VisualImage { get; private set; }
 
     private int _cardIndex;
     private Vector2 _startOffset;
     private Vector3 _onMouseScale = Vector3.one * 1.2f;
 
-    private CardController _contoller;
+    private DeckUI _contoller;
 
     private Sequence _turnSeq;
 
     private int _cost;
 
-    private void Update()
+	private void Awake()
+	{
+		VisualTrm = transform as RectTransform;
+		VisualImage = VisualTrm.GetComponent<Image>();
+	}
+
+	private void Update()
     {
         if (LockedLevel == 0)
         {
@@ -58,25 +60,17 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         }
     }
 
-    public void Init(CardController controller, int index)
+    public void Init(DeckUI controller, Card card, int index)
     {
-        _cardIndex = index;
         _contoller = controller;
-        VisualTrm = transform.Find("Visual") as RectTransform;
-        VisualImage = VisualTrm.GetComponent<Image>();
-        _elementsTrm = VisualTrm.Find("Elements");
-        _costText = _elementsTrm.Find("Cost").GetComponent<TextMeshProUGUI>();
-        _nameText = _elementsTrm.Find("Name").GetComponent<TextMeshProUGUI>();
-        _descriptionText = _elementsTrm.Find("Description").GetComponent<TextMeshProUGUI>();
-        _image = _elementsTrm.Find("Image").GetComponent<Image>();
-        _curseTags = _elementsTrm.Find("CurseTag");
-        _blessingTags = _elementsTrm.Find("BlessingTag");
+		_cardIndex = index;
+        cardData = card;
 
-        _cost = cardSO.cost;
+        _cost = cardData.cardSO.cost;
         _costText.text = _cost.ToString();
-        _nameText.text = cardSO.name;
-        _descriptionText.text = cardSO.cardDescription;
-        _image.sprite = cardSO.image;
+        _nameText.text = cardData.cardSO.name;
+        _descriptionText.text = cardData.cardSO.cardDescription;
+        _image.sprite = cardData.cardSO.image;
 
         IsFront = false;
         _elementsTrm.gameObject.SetActive(false);
@@ -86,7 +80,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void AfterInit()
     {
-        if (curse.Contains(Curse.Envy))
+        if (cardData.curse.Contains(ECurse.Envy))
         {
             if (_cardIndex - 1 >= 0) _contoller.cards[_cardIndex - 1].Lock(true);
             if (_cardIndex + 1 < _contoller.cards.Count) _contoller.cards[_cardIndex + 1].Lock(true);
@@ -95,15 +89,16 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void UpdateTag()
     {
-        foreach (Curse tag in curse)
+        foreach (ECurse tag in cardData.curse)
         {
             _curseTags.GetChild((int)tag).gameObject.SetActive(true);
         }
-        foreach (Blessing tag in blessing)
+        foreach (EBlessing tag in cardData.blessing)
         {
             _blessingTags.GetChild((int)tag).gameObject.SetActive(true);
         }
     }
+
     public void UpdateArray(float interval, float targetXPosInterval, float targetYPosInterval, float targetAngleInterval)
     {
         if (IsHolded) return;
@@ -149,12 +144,12 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             _costText.color = color;
     }
 
-    public bool Use()
+    public bool TryUse()
     {
         if (_contoller.TryUseCost(_cost) == false) return false;
 
-        if (blessing.Contains(Blessing.Penance)) _contoller.AddCard(cardSO, true);
-        if (curse.Contains(Curse.Envy))
+        if (cardData.blessing.Contains(EBlessing.Penance)) _contoller.AddCard(cardData, true);
+        if (cardData.curse.Contains(ECurse.Envy))
         {
             if (_cardIndex - 1 >= 0) _contoller.cards[_cardIndex - 1].Lock(false);
             if (_cardIndex + 1 < _contoller.cards.Count) _contoller.cards[_cardIndex + 1].Lock(false);
@@ -182,7 +177,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         VisualTrm.DOScale(_onMouseScale, 0.1f);
         //VisualTrm.DOAnchorPosY(_visualDefaultYPos + 100f, 0.1f);
     }
-
     public void OnPointerExit(PointerEventData eventData)
     {
         if (LockedLevel != 0) return;
@@ -191,7 +185,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         VisualTrm.DOScale(Vector3.one, 0.1f);
         //VisualTrm.DOAnchorPosY(_visualDefaultYPos, 0.1f);
     }
-
     public void OnPointerDown(PointerEventData eventData)
     {
         if (LockedLevel != 0) return;
@@ -199,7 +192,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         _contoller.SetSelectCard(this, true);
         _startOffset = eventData.position - (Vector2)transform.position;
     }
-
     public void OnPointerUp(PointerEventData eventData)
     {
         if (LockedLevel != 0) return;

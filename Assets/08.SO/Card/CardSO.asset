@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bca8c441d62458b439e68ac64a9ccaa5, type: 3}
-  m_Name: TextCardSO
+  m_Name: CardSO
   m_EditorClassIdentifier: 
   name: "\uC18D\uC8C4\uC758 \uC0AC\uC2AC"
   cost: 5
