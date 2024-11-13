@@ -17,8 +17,5 @@ public abstract class Card
         OnCostModifyEvent?.Invoke(_cost);
 	}
 
-	public bool Use()
-	{
-        return false;
-	}
+    public abstract void OnUse();
 }

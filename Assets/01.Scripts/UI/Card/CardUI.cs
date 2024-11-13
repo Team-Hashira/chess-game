@@ -155,6 +155,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             if (_cardIndex + 1 < _contoller.cards.Count) _contoller.cards[_cardIndex + 1].Lock(false);
         }
         Debug.Log("Use!");
+        cardData.OnUse();
         Destroy(gameObject);
         return true;
     }

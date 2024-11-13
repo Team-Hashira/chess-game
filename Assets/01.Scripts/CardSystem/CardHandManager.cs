@@ -10,12 +10,12 @@ public class CardHandManager : MonoBehaviour
 	{
 		_cardHandList.Clear();
 
-		if(DeckManager.GetCurrentCards().Count <= 0 )
+		if(Deck.GetCurrentCards().Count <= 0 )
 		{
 		}
 
-		DeckManager.OrderByRandomCurrentCards();
-		var curCardList = DeckManager.GetCurrentCards();
+		Deck.OrderByRandomCurrentCards();
+		var curCardList = Deck.GetCurrentCards();
 
 		for (int i = 0; i < 5; i++)
 		{

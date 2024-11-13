@@ -32,7 +32,7 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     [field: SerializeField] public Transform UseAreaTrm { get; private set; }
 
-    private List<Card> CardDataList => DeckManager.GetCurrentCards();
+    private List<Card> CardDataList => Deck.GetCurrentCards();
 
     private void Awake()
     {
