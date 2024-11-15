@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
-    private Card cardData;
+    public Card cardData;
 
     public bool OnSelected { get; private set; }
     public bool IsSelectable { get; private set; }
@@ -159,15 +159,14 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     {
         if (Cost.TryUse(_cost) == false) return false;
 
+        //카드 효과별로 넘겨주기
         if (cardData.blessings.Contains(EBlessing.Penance)) _contoller.AddCard(cardData, true);
         if (cardData.curses.Contains(ECurse.Envy))
         {
             if (_cardIndex - 1 >= 0) _contoller._cardUIList[_cardIndex - 1].Lock(false);
             if (_cardIndex + 1 < _contoller._cardUIList.Count) _contoller._cardUIList[_cardIndex + 1].Lock(false);
         }
-        Debug.Log("Use!");
         cardData.OnUse();
-        Destroy(gameObject);
         return true;
     }
 

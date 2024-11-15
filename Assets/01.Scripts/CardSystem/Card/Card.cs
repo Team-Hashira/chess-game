@@ -10,7 +10,9 @@ public abstract class Card
     public List<EBlessing> blessings;
     public bool isLock = false;
     public event Action<int> OnCostModifyEvent;
-    protected int _cost;
+    public int cost;
+    public CardManager cardManager;
+    public int cardhandIndex = -1;
 
     public Card()
     {
@@ -18,11 +20,7 @@ public abstract class Card
         blessings = new List<EBlessing>();
     }
 
-	public void CostModify(int cost, Color color = default)
-	{
-		_cost = Mathf.Clamp(_cost + cost, 0, 10);
-        OnCostModifyEvent?.Invoke(_cost);
-	}
-
+    public abstract void OnShow();
+    
     public abstract void OnUse();
 }

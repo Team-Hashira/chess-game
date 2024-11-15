@@ -37,11 +37,13 @@ public class CardManager : MonoBehaviour
     {
 		Type t = Type.GetType($"{cardType.ToString()}Card");
 		Card newCard = Activator.CreateInstance(t) as Card;
+		newCard.cost = _cardListSO[cardType].cost;
 		newCard.cardSO = _cardListSO[cardType];
+		newCard.cardManager = this;
 		return newCard;
     }
 
-	public void Lock(Card card, bool isLock)
+	public void CardLock(Card card, bool isLock)
 	{
 		if(_cardHandList.Contains(card))
 		{

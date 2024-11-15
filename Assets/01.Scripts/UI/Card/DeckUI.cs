@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -60,9 +61,6 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private void Update()
     {
-        //_removedCardUIList.ForEach(card => _cardUIList.Remove(card));
-        //_removedCardUIList.Clear();
-
         int cardCount = _cardUIList.Count;
 
         for (int i = 0; i < cardCount; i++)
@@ -88,17 +86,34 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _cardUIList.Add(card);
     }
 
-    public void SetSelectCard(CardUI card, bool isOn)
+    public void RemoveCard(Card card, bool isUse = true)
+    {
+        if(isUse == true)
+        {
+            if(Cost.TryUse(card.cost))
+            {
+                card.OnUse();
+            }
+            else
+            {
+                Debug.Log("카드 사용 실패");
+                return;
+            }
+		}
+        Deck.RemoveCard(card.guid);
+        CardUI removeCardUI = _cardUIList.First(x => x.cardData == card);
+        _cardUIList.Remove(removeCardUI);
+		Destroy(removeCardUI.gameObject);
+	}
+
+	public void SetSelectCard(CardUI card, bool isOn)
     {
         UseAreaTrm.gameObject.SetActive(isOn);
 
         if (isOn == false && card.IsUseable)
         {
-            if (card.TryUse())
-            {
-                //_removedCardUIList.Add(card);
-            }
-        }
+            RemoveCard(card.cardData);
+		}
     }
 
     public void OnPointerEnter(PointerEventData eventData)
