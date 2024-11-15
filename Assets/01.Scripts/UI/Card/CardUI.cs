@@ -42,7 +42,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
 	private void Awake()
 	{
-		VisualTrm = transform as RectTransform;
+		VisualTrm = transform.Find("Visual") as RectTransform;
 		VisualImage = VisualTrm.GetComponent<Image>();
 	}
 
@@ -62,7 +62,9 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void Init(DeckUI controller, Card card, int index)
     {
-        _contoller = controller;
+        Debug.Log(controller);
+
+		_contoller = controller;
 		_cardIndex = index;
         cardData = card;
 
@@ -80,22 +82,31 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void AfterInit()
     {
-        if (cardData.curse.Contains(ECurse.Envy))
+        if (cardData.curses.Contains(ECurse.Envy))
         {
-            if (_cardIndex - 1 >= 0) _contoller.cards[_cardIndex - 1].Lock(true);
-            if (_cardIndex + 1 < _contoller.cards.Count) _contoller.cards[_cardIndex + 1].Lock(true);
+            if (_cardIndex - 1 >= 0) _contoller._cardUIList[_cardIndex - 1].Lock(true);
+            if (_cardIndex + 1 < _contoller._cardUIList.Count) _contoller._cardUIList[_cardIndex + 1].Lock(true);
         }
     }
 
     public void UpdateTag()
     {
-        foreach (ECurse tag in cardData.curse)
+        //저주가 존재한다면
+        if (cardData.curses.Count > 0)
         {
-            _curseTags.GetChild((int)tag).gameObject.SetActive(true);
+            foreach (ECurse tag in cardData.curses)
+            {
+                _curseTags.GetChild((int)tag).gameObject.SetActive(true);
+            }
         }
-        foreach (EBlessing tag in cardData.blessing)
+        
+        //축복이 존재한다면
+        if (cardData.blessings.Count > 0)
         {
-            _blessingTags.GetChild((int)tag).gameObject.SetActive(true);
+            foreach (EBlessing tag in cardData.blessings)
+            {
+                _blessingTags.GetChild((int)tag).gameObject.SetActive(true);
+            }
         }
     }
 
@@ -146,13 +157,13 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public bool TryUse()
     {
-        if (_contoller.TryUseCost(_cost) == false) return false;
+        if (Cost.TryUse(_cost) == false) return false;
 
-        if (cardData.blessing.Contains(EBlessing.Penance)) _contoller.AddCard(cardData, true);
-        if (cardData.curse.Contains(ECurse.Envy))
+        if (cardData.blessings.Contains(EBlessing.Penance)) _contoller.AddCard(cardData, true);
+        if (cardData.curses.Contains(ECurse.Envy))
         {
-            if (_cardIndex - 1 >= 0) _contoller.cards[_cardIndex - 1].Lock(false);
-            if (_cardIndex + 1 < _contoller.cards.Count) _contoller.cards[_cardIndex + 1].Lock(false);
+            if (_cardIndex - 1 >= 0) _contoller._cardUIList[_cardIndex - 1].Lock(false);
+            if (_cardIndex + 1 < _contoller._cardUIList.Count) _contoller._cardUIList[_cardIndex + 1].Lock(false);
         }
         Debug.Log("Use!");
         cardData.OnUse();

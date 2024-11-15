@@ -1,15 +1,25 @@
+using AYellowpaper.SerializedCollections;
+using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CardListSO", menuName = "SO/CardListSO")]
 public class CardListSO : ScriptableObject
 {
-    public List<CardSO> list;
+    [SerializeField] private SerializedDictionary<ECardType, CardSO> _dict; 
 
-    public CardSO this[int index]
+    public CardSO this[ECardType cardType]
     {
-        get => list[index];
-        set => list[index] = value;
+        get => _dict[cardType];
+        set => _dict[cardType] = value;
     }
+
+	private void Reset()
+	{
+        foreach (ECardType type in Enum.GetValues(typeof(ECardType)))
+        {
+            _dict.Add(type, null);
+        }
+	}
 }

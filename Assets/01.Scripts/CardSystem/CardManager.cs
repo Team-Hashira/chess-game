@@ -4,22 +4,48 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
-    private Dictionary<ECardType, Type> cardTypesDict = new Dictionary<ECardType, Type>();
+	private List<Card> _cardHandList;
+	private List<Card> _removedCardList = new List<Card>();
+	[SerializeField] private CardListSO _cardListSO;
 
-    private void Awake()
+	private void Awake()
     {
-        CreateEffectInstance(typeof(ECurse));
-        CreateEffectInstance(typeof(EBlessing));
+		//현재 들고 있는 카드 초기화
+		_cardHandList = new List<Card>(new Card[5]);
+
+		//만약 가지고 있는 카드가 없다면
+		if (Deck.GetCurrentCards().Count <= 0)
+		{
+			//기본 카드를 지급한다. (디버그)
+			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
+			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
+			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
+			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
+			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
+		}
+
+		Deck.OrderByRandomCurrentCards();
+		var curCardList = Deck.GetCurrentCards();
+
+		for (int i = 0; i < 5; i++)
+		{
+			_cardHandList[i] = curCardList[i];
+		}
+	}
+
+    private Card CreateCard(ECardType cardType)		
+    {
+		Type t = Type.GetType($"{cardType.ToString()}Card");
+		Card newCard = Activator.CreateInstance(t) as Card;
+		newCard.cardSO = _cardListSO[cardType];
+		return newCard;
     }
 
-    private void CreateEffectInstance(Type enumType)
-    {
-        foreach (Enum e in Enum.GetValues(enumType))
-        {
-            Type t = Type.GetType($"{e.ToString()}Effect");
-
-            cardTypesDict.Add((ECardType)e, t);
-        }
-
-    }
+	public void Lock(Card card, bool isLock)
+	{
+		if(_cardHandList.Contains(card))
+		{
+			card.isLock = isLock;
+		}
+	}
 }

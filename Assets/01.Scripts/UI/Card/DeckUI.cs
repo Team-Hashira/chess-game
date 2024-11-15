@@ -6,8 +6,7 @@ using UnityEngine.EventSystems;
 
 public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    private List<CardUI> _removedCards;
-    public List<CardUI> cards;
+    public List<CardUI> _cardUIList;
 
     private float _targetAngleInterval;
     private float _targetXPosInterval;
@@ -24,9 +23,6 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private bool _isOpen = false;
 
-    private int _currentCost = 10;
-    [SerializeField] private int _targetCost = 10;
-
     [SerializeField] private CardUI _cardPrefab;
     [SerializeField] private TextMeshProUGUI _costText;
 
@@ -34,76 +30,62 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     private List<Card> CardDataList => Deck.GetCurrentCards();
 
-    private void Awake()
-    {
+	private void Start()
+	{
 		_rectTrm = transform as RectTransform;
-        _startSize = _rectTrm.sizeDelta;
-        cards = new List<CardUI>();
-        _removedCards = new List<CardUI>();
-        GetComponentsInChildren(cards);
+		_startSize = _rectTrm.sizeDelta;
+		_cardUIList = new List<CardUI>();
+        GetComponentsInChildren(_cardUIList);
+        CardUIInit();
+	}
 
-		int cardCount = cards.Count;
-
+	private void CardUIInit()
+    {
+        int cardCount = Mathf.Clamp(CardDataList.Count, 0, 5);
+        Debug.Log(cardCount);
 		for (int i = 0; i < cardCount; i++)
         {
-			cards[i].Init(this, CardDataList[i], i);
+			_cardUIList[i].Init(this, CardDataList[i], i);
 
-            float interval = i - (float)cardCount / 2;
+			float interval = i - (float)cardCount / 2;
 
-            cards[i].transform.localRotation = Quaternion.Euler(0, 0, -interval * _targetAngleInterval);
-            cards[i].VisualTrm.anchoredPosition = new Vector2(interval * _targetXPosInterval, _targetYPosInterval);
+            _cardUIList[i].transform.localRotation = Quaternion.Euler(0, 0, -interval * _targetAngleInterval);
+            _cardUIList[i].VisualTrm.anchoredPosition = new Vector2(interval * _targetXPosInterval, _targetYPosInterval);
         }
         for (int i = 0; i < cardCount; i++)
         {
-            cards[i].AfterInit();
+            _cardUIList[i].AfterInit();
         }
     }
 
     private void Update()
     {
-        _removedCards.ForEach(card => cards.Remove(card));
-        _removedCards.Clear();
+        //_removedCardUIList.ForEach(card => _cardUIList.Remove(card));
+        //_removedCardUIList.Clear();
 
-        int cardCount = cards.Count;
+        int cardCount = _cardUIList.Count;
 
         for (int i = 0; i < cardCount; i++)
         {
             if (_spreadTime + i * _spreadDelay > Time.time) continue;
-
-            if (cards[i].IsFront != _isOpen) cards[i].Turn(_isOpen);
+            if (_cardUIList[i].IsFront != _isOpen) _cardUIList[i].Turn(_isOpen);
 
             float interval = i - (cardCount / 2 - (cardCount % 2 == 0 ? 0.5f : 0));
-            cards[i].UpdateArray(interval, _targetXPosInterval, _targetYPosInterval, _targetAngleInterval);
+            _cardUIList[i].UpdateArray(interval, _targetXPosInterval, _targetYPosInterval, _targetAngleInterval);
         }
 
-
-        UpdateCost();
-    }
-
-    public bool TryUseCost(int amount)
-    {
-        if (_targetCost < amount) return false;
-
-        _targetCost -= amount;
-        return true;
-    }
-
-    public void UpdateCost()
-    {
-        if (_currentCost < _targetCost) _currentCost++;
-        else if (_currentCost > _targetCost) _currentCost--;
-        _costText.text = $"Cost : {_currentCost.ToString()}";
-    }
+		_costText.text = $"Cost : {Cost.Get().ToString()}";
+	}
 
     public void AddCard(Card cardData, bool isPenance = false)
     {
         CardUI card = Instantiate(_cardPrefab, transform);
         card.transform.localPosition = Vector3.zero;
 
-        card.Init(this, cardData, cards.Count);
+        card.Init(this, cardData, _cardUIList.Count);
 
         if (isPenance) card.CostModify(-10, Color.yellow);
-        cards.Add(card);
+        _cardUIList.Add(card);
     }
 
     public void SetSelectCard(CardUI card, bool isOn)
@@ -114,7 +96,7 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         {
             if (card.TryUse())
             {
-                _removedCards.Add(card);
+                //_removedCardUIList.Add(card);
             }
         }
     }
@@ -127,12 +109,12 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _targetAngleInterval = angleInterval;
         _targetYPosInterval = yPosInterval;
         _targetXPosInterval = xPosInterval;
-        _rectTrm.sizeDelta = new Vector2(1500 * ((float)cards.Count / 5), 1300);
+        _rectTrm.sizeDelta = new Vector2(1500 * ((float)_cardUIList.Count / 5), 1300);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (UseAreaTrm.gameObject.activeSelf) return;
+		if (UseAreaTrm.gameObject.activeSelf) return;
         _isOpen = false;
         _spreadTime = Time.time;
         _targetAngleInterval = 0f;

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b58195ad57aa3aa42be50bdc2996be12, type: 3}
   m_Name: CardListSO
   m_EditorClassIdentifier: 
-  list:
-  - {fileID: 11400000, guid: b49f28898d7b877428fd0be2b43bee83, type: 2}
-  - {fileID: 11400000, guid: d2459b9c4d8a423459dc72b7b1d93013, type: 2}
+  _dict:
+    _serializedList:
+    - Key: 0
+      Value: {fileID: 11400000, guid: b49f28898d7b877428fd0be2b43bee83, type: 2}

@@ -29,20 +29,19 @@ public class Deck
 
 	public static List<Card> GetCurrentCards()
 	{
-		return _cardList;
+		return _cardDict.Values.ToList();
 	}
 
 	public static List<Card> OrderByRandomCurrentCards()
 	{
 		if (_cardList == null) _cardList = new List<Card>();
-		else _cardList.Clear();
 
 		_cardList = _cardDict.Values.ToList();
 
 		for (int i = 0; i < 10; i++)
 		{
-			int randX = UnityEngine.Random.Range(0, _cardList.Count);
-			int randY = UnityEngine.Random.Range(0, _cardList.Count);
+			int randX = UnityEngine.Random.Range(0, _cardDict.Values.Count);
+			int randY = UnityEngine.Random.Range(0, _cardDict.Values.Count);
 
 			//Swap
 			var temp = _cardList[randX];
