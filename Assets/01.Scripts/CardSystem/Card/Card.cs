@@ -20,7 +20,16 @@ public abstract class Card
         blessings = new List<EBlessing>();
     }
 
+    /// <summary>
+    /// 5개의 카드가 패에 모두 셋팅 후, 패에 자신이 있거나 패에 변경 사항이 생기면 호출됨
+    /// </summary>
+    public virtual void Refresh()
+    {
+		EffectManager.Instance.SetEffect(this);
+	}
     public abstract void OnShow();
-    
-    public abstract void OnUse();
+    public virtual void OnUse()
+    {
+		EffectManager.Instance.OnCardUse(this);
+	}
 }

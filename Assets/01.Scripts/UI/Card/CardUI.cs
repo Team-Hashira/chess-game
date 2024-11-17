@@ -10,7 +10,6 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public bool OnSelected { get; private set; }
     public bool IsSelectable { get; private set; }
-    public int LockedLevel { get; private set; } = 0;
     public bool IsHolded { get; private set; }
     public bool IsUseable { get; private set; }
     public bool IsFront { get; private set; }
@@ -23,7 +22,8 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     [SerializeField] private TextMeshProUGUI _costText;
     [SerializeField] private TextMeshProUGUI _nameText;
     [SerializeField] private TextMeshProUGUI _descriptionText;
-    [SerializeField] private Image _image;
+    [SerializeField] private Image _iconImage;
+    [SerializeField] private Image _blackImage;
     [SerializeField] private Transform _curseTags;
     [SerializeField] private Transform _blessingTags;
 
@@ -34,7 +34,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
     private Vector2 _startOffset;
     private Vector3 _onMouseScale = Vector3.one * 1.2f;
 
-    private DeckUI _contoller;
+    private CardHandUI _contoller;
 
     private Sequence _turnSeq;
 
@@ -48,22 +48,18 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
 	private void Update()
     {
-        if (LockedLevel == 0)
+		if (CanUse == false) return;
+		if (IsHolded)
         {
-            if (IsHolded)
-            {
-                transform.position = Input.mousePosition - (Vector3)_startOffset;
-                VisualTrm.localRotation = Quaternion.Lerp(VisualTrm.localRotation,
-                    Quaternion.Inverse(transform.localRotation), Time.deltaTime * 10);
-                UpdateUseable();
-            }
+            transform.position = Input.mousePosition - (Vector3)_startOffset;
+            VisualTrm.localRotation = Quaternion.Lerp(VisualTrm.localRotation,
+                Quaternion.Inverse(transform.localRotation), Time.deltaTime * 10);
+            UpdateUseable();
         }
     }
 
-    public void Init(DeckUI controller, Card card, int index)
+    public void Init(CardHandUI controller, Card card, int index)
     {
-        Debug.Log(controller);
-
 		_contoller = controller;
 		_cardIndex = index;
         cardData = card;
@@ -72,7 +68,7 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         _costText.text = _cost.ToString();
         _nameText.text = cardData.cardSO.name;
         _descriptionText.text = cardData.cardSO.cardDescription;
-        _image.sprite = cardData.cardSO.image;
+        _iconImage.sprite = cardData.cardSO.image;
 
         IsFront = false;
         _elementsTrm.gameObject.SetActive(false);
@@ -80,16 +76,14 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         UpdateTag();
     }
 
-    public void AfterInit()
-    {
-        if (cardData.curses.Contains(ECurse.Envy))
-        {
-            if (_cardIndex - 1 >= 0) _contoller._cardUIList[_cardIndex - 1].Lock(true);
-            if (_cardIndex + 1 < _contoller._cardUIList.Count) _contoller._cardUIList[_cardIndex + 1].Lock(true);
-        }
-    }
+    public bool CanUse => !cardData.isLock && cardData.cost <= Cost.Get();
 
-    public void UpdateTag()
+	public void RefreshCardUI()
+    {
+		_blackImage.gameObject.SetActive(!CanUse);
+	}
+
+	public void UpdateTag()
     {
         //저주가 존재한다면
         if (cardData.curses.Count > 0)
@@ -125,8 +119,8 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
 
     public void Lock(bool isLock)
     {
-        LockedLevel += isLock ? 1 : -1;
-        VisualImage.color = LockedLevel != 0 ? Color.gray : Color.white;
+        cardData.isLock = isLock;
+        _blackImage.gameObject.SetActive(!isLock);
     }
 
     public void Turn(bool isFront)
@@ -166,8 +160,10 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
             if (_cardIndex - 1 >= 0) _contoller._cardUIList[_cardIndex - 1].Lock(false);
             if (_cardIndex + 1 < _contoller._cardUIList.Count) _contoller._cardUIList[_cardIndex + 1].Lock(false);
         }
-        cardData.OnUse();
-        return true;
+		_contoller.CardManager.UseCard(cardData);
+        _contoller.RefreshCardHand();
+
+		return true;
     }
 
     public void UpdateUseable()
@@ -176,38 +172,48 @@ public class CardUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, 
         if (IsUseable != newValue)
         {
             IsUseable = newValue;
-            VisualImage.color = IsUseable ? Color.blue : (LockedLevel != 0 ? Color.gray : Color.white);
+            VisualImage.color = IsUseable ? Color.blue :  Color.white;
         }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (LockedLevel != 0) return;
-        if (IsFront == false || IsSelectable == false || IsHolded) return;
+		if (CanUse == false) return;
+		if (IsFront == false || IsSelectable == false || IsHolded) return;
         OnSelected = true;
         VisualTrm.DOScale(_onMouseScale, 0.1f);
-        //VisualTrm.DOAnchorPosY(_visualDefaultYPos + 100f, 0.1f);
     }
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (LockedLevel != 0) return;
-        if (IsFront == false || IsSelectable == false || IsHolded) return;
+		if (CanUse == false) return;
+		if (IsFront == false || IsSelectable == false || IsHolded) return;
         OnSelected = false;
         VisualTrm.DOScale(Vector3.one, 0.1f);
-        //VisualTrm.DOAnchorPosY(_visualDefaultYPos, 0.1f);
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (LockedLevel != 0) return;
-        IsHolded = true;
-        _contoller.SetSelectCard(this, true);
+		if (CanUse == false) return;
+		IsHolded = true;
+        SetSelectCard(true);
         _startOffset = eventData.position - (Vector2)transform.position;
     }
     public void OnPointerUp(PointerEventData eventData)
-    {
-        if (LockedLevel != 0) return;
-        IsHolded = false;
-        VisualImage.color = LockedLevel != 0 ? Color.gray : Color.white;
-        _contoller.SetSelectCard(this, false);
+	{
+		if (CanUse == false) return;
+		IsHolded = false;
+        SetSelectCard(false);
     }
+
+	public void SetSelectCard(bool isOn)
+	{
+		if (CanUse == false) return;
+		_contoller.UseAreaTrm.gameObject.SetActive(isOn);
+
+		if (isOn == false && IsUseable)
+		{
+            TryUse();
+			_contoller.RemoveCard(cardData);
+			_contoller.RefreshCardHand();
+		}
+	}
 }

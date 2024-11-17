@@ -1,6 +1,13 @@
-using UnityEngine;
-
 public abstract class Effect
 {
-	public abstract void Init();
+	protected CardManager _cardManager;
+	protected EffectManager _effectManager;
+
+	public virtual void ApplyEffect(Card owner)
+	{
+		_cardManager ??= CardManager.Instance;
+		_effectManager ??= EffectManager.Instance;
+	}
+
+	public abstract void OnCardUse(Card owner);
 }

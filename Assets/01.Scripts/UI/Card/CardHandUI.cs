@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class CardHandUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public List<CardUI> _cardUIList;
 
@@ -26,10 +26,10 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     [SerializeField] private CardUI _cardPrefab;
     [SerializeField] private TextMeshProUGUI _costText;
-
+	[field: SerializeField] public CardManager CardManager {get; private set;} 
     [field: SerializeField] public Transform UseAreaTrm { get; private set; }
 
-    private List<Card> CardDataList => Deck.GetCurrentCards();
+    private List<Card> CardDataList => DeckManager.GetCurrentCards();
 
 	private void Start()
 	{
@@ -41,9 +41,8 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 	}
 
 	private void CardUIInit()
-    {
+    { 
         int cardCount = Mathf.Clamp(CardDataList.Count, 0, 5);
-        Debug.Log(cardCount);
 		for (int i = 0; i < cardCount; i++)
         {
 			_cardUIList[i].Init(this, CardDataList[i], i);
@@ -53,11 +52,8 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
             _cardUIList[i].transform.localRotation = Quaternion.Euler(0, 0, -interval * _targetAngleInterval);
             _cardUIList[i].VisualTrm.anchoredPosition = new Vector2(interval * _targetXPosInterval, _targetYPosInterval);
         }
-        for (int i = 0; i < cardCount; i++)
-        {
-            _cardUIList[i].AfterInit();
-        }
-    }
+		RefreshCardHand();
+	}
 
     private void Update()
     {
@@ -88,32 +84,21 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
     public void RemoveCard(Card card, bool isUse = true)
     {
-        if(isUse == true)
-        {
-            if(Cost.TryUse(card.cost))
-            {
-                card.OnUse();
-            }
-            else
-            {
-                Debug.Log("카드 사용 실패");
-                return;
-            }
-		}
-        Deck.RemoveCard(card.guid);
         CardUI removeCardUI = _cardUIList.First(x => x.cardData == card);
         _cardUIList.Remove(removeCardUI);
 		Destroy(removeCardUI.gameObject);
 	}
 
-	public void SetSelectCard(CardUI card, bool isOn)
+    public void RefreshCardHand()
     {
-        UseAreaTrm.gameObject.SetActive(isOn);
+		for (int i = 0; i < CardManager.CurHandCardCount; i++)
+		{
+			CardManager.CardHandList[i].Refresh();
+            _cardUIList[i].RefreshCardUI();
+        }
+        //효과 적용
 
-        if (isOn == false && card.IsUseable)
-        {
-            RemoveCard(card.cardData);
-		}
+        //
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -126,7 +111,6 @@ public class DeckUI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
         _targetXPosInterval = xPosInterval;
         _rectTrm.sizeDelta = new Vector2(1500 * ((float)_cardUIList.Count / 5), 1300);
     }
-
     public void OnPointerExit(PointerEventData eventData)
     {
 		if (UseAreaTrm.gameObject.activeSelf) return;

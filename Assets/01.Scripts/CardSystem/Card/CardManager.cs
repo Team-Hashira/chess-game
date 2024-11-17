@@ -1,37 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class CardManager : MonoBehaviour
+public class CardManager : MonoSingleton<CardManager>
 {
-	private List<Card> _cardHandList;
+	public List<Card> CardHandList { get; private set; }
 	private List<Card> _removedCardList = new List<Card>();
 	[SerializeField] private CardListSO _cardListSO;
 
 	private void Awake()
     {
 		//현재 들고 있는 카드 초기화
-		_cardHandList = new List<Card>(new Card[5]);
+		CardHandList = new List<Card>(new Card[5]);
 
 		//만약 가지고 있는 카드가 없다면
-		if (Deck.GetCurrentCards().Count <= 0)
+		if (DeckManager.GetCurrentCards().Count <= 0)
 		{
 			//기본 카드를 지급한다. (디버그)
-			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
-			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
-			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
-			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
-			Deck.AddCard(Guid.NewGuid(), CreateCard(ECardType.ChainOfAtonement));
+
+			var firstCard = CreateCard(ECardType.ChainOfAtonement);
+			firstCard.curses.Add(ECurse.Envy);
+
+			DeckManager.AddCard(firstCard);
+			DeckManager.AddCard(CreateCard(ECardType.ChainOfAtonement));
+			DeckManager.AddCard(CreateCard(ECardType.ChainOfAtonement));
+			DeckManager.AddCard(CreateCard(ECardType.ChainOfAtonement));
+			DeckManager.AddCard(CreateCard(ECardType.ChainOfAtonement));
 		}
 
-		Deck.OrderByRandomCurrentCards();
-		var curCardList = Deck.GetCurrentCards();
-
-		for (int i = 0; i < 5; i++)
-		{
-			_cardHandList[i] = curCardList[i];
-		}
+		CardHandList = DeckManager.PeekRandomCards();
 	}
+
+	public int CurHandCardCount => CardHandList.Count;
 
     private Card CreateCard(ECardType cardType)		
     {
@@ -43,9 +44,17 @@ public class CardManager : MonoBehaviour
 		return newCard;
     }
 
+	public void UseCard(Card card)
+	{
+		Card usedCard = CardHandList.First(x=>x==card);
+		usedCard.OnUse();
+		usedCard.isLock = false;
+		CardHandList.Remove(usedCard);
+	}
+
 	public void CardLock(Card card, bool isLock)
 	{
-		if(_cardHandList.Contains(card))
+		if(CardHandList.Contains(card))
 		{
 			card.isLock = isLock;
 		}
