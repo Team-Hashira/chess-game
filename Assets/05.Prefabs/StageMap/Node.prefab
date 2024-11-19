@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3207161022078473777}
   - component: {fileID: 4228374006676789838}
   - component: {fileID: 1519874464518827419}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: Node
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -83,6 +83,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canSeledable: 0
+  _selectedScale: 1.2
+  _duration: 0.1
 --- !u!1 &9100384101659799361
 GameObject:
   m_ObjectHideFlags: 0

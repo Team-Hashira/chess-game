@@ -8,9 +8,11 @@ namespace StageMap
 		public bool canSeledable = false;
 		[SerializeField] private float _selectedScale = 1.2f;
 		[SerializeField] private float _duration = 0.1f;
+		public Stage stageData;
 
 		public void OnClick()
 		{
+			StageController.Instance.SetCurSelectedStage(stageData);
 		}
 
 		public void OnSelectEnter()

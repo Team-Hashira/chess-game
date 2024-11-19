@@ -442,7 +442,7 @@ MonoBehaviour:
   _inputReader: {fileID: 11400000, guid: 836c45128fe44d04995e0341f944d184, type: 2}
   _whatIsSelectable:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 8192
 --- !u!4 &368189431
 Transform:
   m_ObjectHideFlags: 0
@@ -749,6 +749,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _stageMapGenerator: {fileID: 236032568}
   _stageSceneListSO: {fileID: 11400000, guid: 32d874a1abd76de408279b20f13a1b3b, type: 2}
+  _curSelectableStages: []
   curSelectedStage:
     stageType: 0
     posAtWorld: {x: 0, y: 0}

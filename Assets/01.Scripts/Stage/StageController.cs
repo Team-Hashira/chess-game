@@ -3,7 +3,7 @@ using StageMap;
 using System.Collections.Generic;
 using System;
 
-public class StageController : MonoBehaviour
+public class StageController : MonoSingleton<StageController>
 {
     [SerializeField] private StageMapGenerator _stageMapGenerator;
     [SerializeField] private StageSceneListSO _stageSceneListSO;
@@ -12,10 +12,20 @@ public class StageController : MonoBehaviour
 
 	public static StageType stageType;
 
-    [SerializeField] private List<Stage> _curSelectableStages;
+    public List<Stage> _curSelectableStages;
     public Stage curSelectedStage;
 
-    public void SetCurSelectedStage(Stage stage)
+	private void Start()
+	{
+        Stage[,] stages = StageMapGenerator.GetStage();
+
+  //      for (int i = 0; i < stages.GetLength(0); i++)
+  //      {
+  //          _curSelectableStages.Add(stages[0, i]);
+		//}
+	}
+
+	public void SetCurSelectedStage(Stage stage)
     {
         _curSelectableStages.Clear();
 		curSelectedStage = stage;

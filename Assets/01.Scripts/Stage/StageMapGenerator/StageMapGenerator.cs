@@ -1,7 +1,5 @@
-using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
 
 namespace StageMap
@@ -32,13 +30,15 @@ namespace StageMap
 
 		private int stageTypeMaxCount;
 
-		private Stage[,] _map;
+		private static Stage[,] _map;
 		private Vector2 _mapCenter;
 		
 		private void Awake()
 		{
 			GenerateMap();
 		}
+
+		public static Stage[,] GetStage() => _map;
 
 		[ContextMenu("GenerateMap")]
 		public void GenerateMap()
@@ -49,7 +49,6 @@ namespace StageMap
 			{
 				Destroy(transform.GetChild(i).gameObject);
 			}
-
 
 			for (int i = 0; i < maxDepth; i++)
 				for (int j = 0; j < maxRange; j++)
@@ -72,8 +71,9 @@ namespace StageMap
 				stage.posAtWorld = 
 					new Vector2(firstRanPos[i], 0) * interval 
 					+ UnityEngine.Random.insideUnitCircle * ranWorldOffset;
-
+				 
 				var icon = Instantiate(_nodePrefab, stage.posAtWorld, Quaternion.identity);
+				icon.stageData = stage;
 				icon.transform.SetParent(transform, true);
 				AddRandomTarget(0, firstRanPos[i]);
 			}
@@ -214,6 +214,5 @@ namespace StageMap
 					}
 			}
 		}
-
 	}
 }
