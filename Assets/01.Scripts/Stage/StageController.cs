@@ -12,7 +12,7 @@ public class StageController : MonoBehaviour
 
 	public static StageType stageType;
 
-    private List<Stage> _curSelectableStages;
+    [SerializeField] private List<Stage> _curSelectableStages;
     public Stage curSelectedStage;
 
     public void SetCurSelectedStage(Stage stage)

@@ -748,6 +748,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _stageMapGenerator: {fileID: 236032568}
+  _stageSceneListSO: {fileID: 11400000, guid: 32d874a1abd76de408279b20f13a1b3b, type: 2}
+  curSelectedStage:
+    stageType: 0
+    posAtWorld: {x: 0, y: 0}
+    targets: []
+    visitCount: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

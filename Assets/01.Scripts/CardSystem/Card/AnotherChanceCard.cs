@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ChainOfAtonementCard : Card
+public class AnotherChanceCard : Card
 {
 	public override void OnShow()
 	{
