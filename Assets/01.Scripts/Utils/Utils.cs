@@ -17,5 +17,8 @@ public static class Utils
     public static Vector2Int ConvertToInt(this Vector2 vector, ConvertType type = ConvertType.Ceil)
        => type == ConvertType.Ceil ? new Vector2Int(Mathf.CeilToInt(vector.x), Mathf.CeilToInt(vector.y))
        : new Vector2Int(Mathf.RoundToInt(vector.x), Mathf.RoundToInt(vector.y));
-
+    public static Vector3 ConvertToFloat(this Vector3Int vector)
+        => new Vector3(vector.x, vector.y, vector.z);
+    public static Vector2 ConvertToFloat(this Vector2Int vector)
+        => new Vector2(vector.x, vector.y);
 }

@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class TurnManager : MonoBehaviour
+public class TurnManager : MonoSingleton<TurnManager>
 {
-	[SerializeField] private ETeamType _startTeam = ETeamType.White;
+	[SerializeField] private ETeamType _startTeam = ETeamType.Player;
 	public ETeamType CurTeam { get; private set; }
 	private Dictionary<ETeamType, int> _turnCountDictionary;
 
@@ -22,7 +24,16 @@ public class TurnManager : MonoBehaviour
 		_turnCountDictionary[CurTeam]++;
 	}
 
-	public int GetCurTeamTurnCount() => _turnCountDictionary[CurTeam];
+    private void Update()
+    {
+        if (Keyboard.current.uKey.wasPressedThisFrame)
+		{
+			UseTurnCurTeam();
+			NextTurn();
+		}
+    }
+
+    public int GetCurTeamTurnCount() => _turnCountDictionary[CurTeam];
 
 	public void NextTurn()
 	{
