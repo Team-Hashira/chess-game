@@ -19,10 +19,10 @@ public class StageController : MonoSingleton<StageController>
 	{
         Stage[,] stages = StageMapGenerator.GetStage();
 
-  //      for (int i = 0; i < stages.GetLength(0); i++)
-  //      {
-  //          _curSelectableStages.Add(stages[0, i]);
-		//}
+        for (int i = 0; i < stages.GetLength(1); i++)
+        {
+			_curSelectableStages.Add(stages[0, i]);
+        }
 	}
 
 	public void SetCurSelectedStage(Stage stage)

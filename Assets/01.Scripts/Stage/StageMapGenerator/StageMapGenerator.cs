@@ -87,7 +87,7 @@ namespace StageMap
 				}
 			}
 
-			//朝五虞 実
+			//朝五虞 実特
 			_mapCenter = new Vector2(maxRange / 2, (maxDepth / 2)-1) * interval;
 			Camera.main.transform.position = new Vector3(_mapCenter.x, _mapCenter.y, -10);
 		}
