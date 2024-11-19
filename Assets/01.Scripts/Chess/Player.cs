@@ -3,6 +3,7 @@ using DG.Tweening;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Unity.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -12,6 +13,7 @@ public class Player : Piece, IPointerClickHandler
 {
     [SerializeField]
     private InputReader _inputReader;
+    private Collider2D _collider;
 
     private bool _isSelected;
 
@@ -19,6 +21,29 @@ public class Player : Piece, IPointerClickHandler
     {
         _inputReader.OnMouseMoveEvent += HandleOnMouseMoveEvent;
         _inputReader.OnLeftMouseClickEvent += HandleOnLeftMouseClickEvent;
+        TurnManager.Instance.OnTurnEndEvent += HandleOnTurnEndEvent;
+
+        _collider = GetComponent<Collider2D>();
+    }
+
+    private void OnDestroy()
+    {
+        _inputReader.OnMouseMoveEvent -= HandleOnMouseMoveEvent;
+        _inputReader.OnLeftMouseClickEvent -= HandleOnLeftMouseClickEvent;
+        TurnManager.Instance.OnTurnEndEvent -= HandleOnTurnEndEvent;
+    }
+
+    private void HandleOnTurnEndEvent(ETeamType type)
+    {
+        _isSelected = false;
+        if (type == ETeamType.Player)
+        {
+            _collider.enabled = true;
+        }
+        else
+        {
+            _collider.enabled = false;
+        }
     }
 
     private void HandleOnLeftMouseClickEvent(bool isClicked)
@@ -39,7 +64,9 @@ public class Player : Piece, IPointerClickHandler
                     }
                     transform.DOJump(_board.GetSquare(boardPos).position, 2f, 1, 0.5f);
                     _isSelected = false;
-                    _position = boardPos;
+                    Move(boardPos);
+                    TurnManager.Instance.UseTurnCurTeam();
+                    TurnManager.Instance.NextTurn();
                 }
             }
         }
@@ -78,11 +105,6 @@ public class Player : Piece, IPointerClickHandler
     private void SelectMovement()
     {
         if (!_isSelected) return;
-
-    }
-
-    private void Move(Vector2Int position)
-    {
 
     }
 

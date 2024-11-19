@@ -96,10 +96,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9150385809433453135}
-  - component: {fileID: 8223393268595658160}
+  - component: {fileID: -5798576712908424715}
   - component: {fileID: 4480218923180679454}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,7 +121,7 @@ Transform:
   - {fileID: 793017792989051450}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8223393268595658160
+--- !u!114 &-5798576712908424715
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -130,15 +130,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 5613784436189456176}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6808bd570f9cc1d44a6ebfa326188e1d, type: 3}
+  m_Script: {fileID: 11500000, guid: 21928b901a6c9b74fbb4a791e693707c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pieceMovementText: {fileID: 4900000, guid: 3e068959da2e3db41a85ccbd4b0755fd, type: 3}
-  _pieceType: 0
+  _pieceMovementText: {fileID: 4900000, guid: b969e30496924434896b2fba84a2c8b4, type: 3}
+  _teamType: 1
+  _pieceType: 4
   _pieceValue: 0
   _canMove: 1
   _pieceMovementList: []
-  _inputReader: {fileID: 11400000, guid: 836c45128fe44d04995e0341f944d184, type: 2}
 --- !u!61 &4480218923180679454
 BoxCollider2D:
   m_ObjectHideFlags: 0

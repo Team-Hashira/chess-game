@@ -1,5 +1,8 @@
 using DG.Tweening;
+using JetBrains.Annotations;
+using System.Collections.Generic;
 using System.Data.SqlTypes;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,6 +15,13 @@ public struct PieceOnBoard
     public Piece piecePrefab;
 }
 
+public class PossibleMove
+{
+    public Piece piece;
+    public Vector2Int from;
+    public Vector2Int to;
+}
+
 public class Board : MonoBehaviour
 {
     private Tilemap _tilemap;
@@ -19,12 +29,16 @@ public class Board : MonoBehaviour
     private Square[,] _squares;
     [SerializeField]
     private PieceOnBoard[] _pieceOnBoard;
+    private Dictionary<Piece, Square> _pieceDictionary;
+    private List<Piece> _pieces;
 
     private void Awake()
     {
         Transform visualTrm = transform.Find("Visual");
         Vector2 offset = visualTrm.position = transform.position;
         _tilemap = visualTrm.Find("Tilemap").GetComponent<Tilemap>();
+        _pieces = new List<Piece>();
+        _pieceDictionary = new Dictionary<Piece, Square>();
 
         BoundsInt bounds = _tilemap.cellBounds;
         _offset.x = bounds.min.x;
@@ -44,11 +58,13 @@ public class Board : MonoBehaviour
             }
         }
 
-        for(int i = 0; i < _pieceOnBoard.Length; i++)
+        for (int i = 0; i < _pieceOnBoard.Length; i++)
         {
             Vector2Int pos = _pieceOnBoard[i].position;
             Piece piece = Instantiate(_pieceOnBoard[i].piecePrefab, _squares[pos.y, pos.x].position, Quaternion.identity);
             piece.Initialize(this, pos);
+            _pieceDictionary.Add(piece, _squares[pos.y, pos.x]);
+            _pieces.Add(piece);
         }
     }
 
@@ -65,6 +81,49 @@ public class Board : MonoBehaviour
         Vector2Int v = point -= _offset;
         v -= Vector2Int.one;
         return v;
+    }
+
+    public List<PossibleMove> GetAllEnemiesPossibleMoves()
+    {
+        List<PossibleMove> moves = new List<PossibleMove>();
+        foreach (Piece piece in _pieces)
+        {
+            if (piece.TeamType == ETeamType.Enemy)
+            {
+                moves.AddRange(piece.GetPossibleMoves());
+            }
+        }
+        return moves;
+    }
+
+    public List<PossibleMove> GetAllPlayerPossibleMoves()
+    {
+        List<PossibleMove> moves = new List<PossibleMove>();
+        foreach (Piece piece in _pieces)
+        {
+            if (piece.TeamType == ETeamType.Player)
+            {
+                moves = piece.GetPossibleMoves();
+                break;
+            }
+        }
+        return moves;
+    }
+
+    public void MovePiece(Piece piece, Vector2Int from, Vector2Int to)
+    {
+        _squares[from.y, from.x].piece = null;
+        _squares[to.y, to.x].piece = piece;
+    }
+
+    public void MakeMove(PossibleMove move)
+    {
+        MovePiece(move.piece, move.from, move.to);
+    }
+
+    public void UndoMove(PossibleMove move)
+    {
+        MovePiece(move.piece, move.to, move.from);
     }
 
     public Square GetSquare(Vector2Int pos)

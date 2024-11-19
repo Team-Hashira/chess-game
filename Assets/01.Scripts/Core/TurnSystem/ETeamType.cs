@@ -1,4 +1,4 @@
 ﻿public enum ETeamType
 {
-	White=0, Black=1
+	Player=0, Enemy=1
 }
